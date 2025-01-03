@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class UserPage : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ItemAdapter
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,11 +22,17 @@ class UserPage : AppCompatActivity() {
         setContentView(R.layout.activity_user_page)
 
 
+
+
         val itemList = listOf("Item 1", "Item 2", "Item 3", "Item 4")
         val adapter = ItemAdapter(itemList)
         val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
         val destinationSpinner: Spinner = findViewById(R.id.spinnerDestination)
         val daysSpinner: Spinner = findViewById(R.id.spinnerDays)
+
+        recyclerView = findViewById(R.id.recyclerView1)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = adapter
 
         // Data for spinners
         val locations = listOf(
@@ -39,6 +49,7 @@ class UserPage : AppCompatActivity() {
             "Thiruvallur",
             "Pondicherry"
         )
+
         val days = (1..10).map { it.toString() }
 
         // Adapters for spinners
@@ -53,7 +64,6 @@ class UserPage : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.backButton1).setOnClickListener {
             finish()
-
         }
     }
 }

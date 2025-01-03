@@ -38,4 +38,5 @@
     <string name="username">Username</string>
     <string name="user_loginaa">User Login</string>
     <string name="open_in_google_maps">Open in Google Maps</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

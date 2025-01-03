@@ -21,8 +21,8 @@ class DriverPage : AppCompatActivity() {
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        val itemList = listOf("Item 1", "Item 2", "Item 3", "Item 4")
-        val adapter = ItemAdapter(itemList)
+        val itemList = listOf("Driver name 1", "Item 2", "Item 3", "Item 4")
+        val adapter = DriverJobsAdapter(itemList)
         recyclerView.adapter = adapter
         val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
         val destinationSpinner: Spinner = findViewById(R.id.spinnerDestination)
