@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class AdminPage : AppCompatActivity() {
+
+
+    private var itemList: ArrayList<CarAvailableModule> = arrayListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -18,7 +22,9 @@ class AdminPage : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        val itemList = listOf("Item 1", "Item 2", "Item 3", "Item 4")
+        itemList.add(CarAvailableModule(R.drawable.baseline_person_24, "Car 1"))
+        itemList.add(CarAvailableModule(R.drawable.baseline_person_24, "Car 2"))
+        itemList.add(CarAvailableModule(R.drawable.baseline_person_24, "Car 3"))
         val adapter = ItemAdapter(itemList)
         recyclerView.adapter = adapter
         val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
