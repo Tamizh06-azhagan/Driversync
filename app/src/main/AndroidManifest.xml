@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -11,7 +11,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverSyncTrackAndDrive"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".Profilepage"
+            android:exported="false" />
+        <activity
+            android:name=".UserLogin"
+            android:exported="false" />
+        <activity
+            android:name=".item_driverstatus_layout"
+            android:exported="false" />
+        <activity
+            android:name=".DriverStatus"
+            android:exported="false" />
+        <activity
+            android:name=".MoreDetails"
+            android:exported="false" />
+        <activity
+            android:name=".ViewallPage"
+            android:exported="false" />
+        <activity
+            android:name=".DriverDetails"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -20,10 +41,7 @@
         <activity
             android:name=".MapsActivity"
             android:exported="true"
-            android:label="@string/title_activity_maps" >
-
-        </activity>
-
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".DriverAvailable"
             android:exported="false" />
@@ -38,7 +56,7 @@
             android:exported="true" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

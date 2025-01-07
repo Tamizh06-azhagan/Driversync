@@ -90,11 +90,12 @@
                         tools:itemCount="4"
                         tools:listitem="@layout/item_driverpage_layout" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:layout_width="356dp"
                         android:layout_height="wrap_content"
-                        android:text="More details"
-                        android:textColor="#3F51B5"/>
+                        android:background="@drawable/ne1"
+                        android:text="View all"
+                        android:textColor="#3F51B5" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

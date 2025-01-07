@@ -18,23 +18,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/circle_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="72dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="208dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:contentDescription="@null"
         android:src="@drawable/su"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view" />
+
+    <Spinner
+        android:id="@+id/roleSpinner"
+        android:layout_width="212dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="22dp"
+        android:padding="12dp"
+        android:spinnerMode="dropdown"
+        android:background="@drawable/spinner_bg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:id="@+id/name"
         android:layout_width="197dp"
         android:layout_height="51dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:autofillHints="username"
         android:background="@drawable/ne"
         android:drawableStart="@drawable/baseline_person_24"
@@ -44,14 +62,15 @@
         android:padding="5dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/roleSpinner" />
 
     <EditText
         android:id="@+id/usernameuserbutton"
         android:layout_width="197dp"
         android:layout_height="51dp"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="32dp"
         android:autofillHints="username"
         android:background="@drawable/ne"
         android:drawableStart="@drawable/baseline_person_24"
@@ -61,8 +80,9 @@
         android:padding="5dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
         android:id="@+id/emailbutton"
@@ -73,17 +93,19 @@
         android:background="@drawable/ne"
         android:drawableStart="@drawable/baseline_attach_email_24"
         android:drawablePadding="5dp"
+        android:padding="5dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameuserbutton" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        android:layout_width="206dp"
-        android:layout_height="54dp"
+        android:layout_width="192dp"
+        android:layout_height="52dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/ne"
         android:textColorHint="@color/black"
@@ -108,9 +130,10 @@
         android:id="@+id/Usersignupbutton"
         android:layout_width="110dp"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/ne"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/buttonbackround"
         android:text="Signup"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

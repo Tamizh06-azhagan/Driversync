@@ -36,7 +36,7 @@ class AdminPage : AppCompatActivity() {
             "Chennai", "Kanchipuram", "Vellore", "Ranipet",
             "Chengalpet", "Villupuram", "Thiruvannamalai", "Bengaluru", "Tirupati","Thiruvallur","Pondicherry"
         )
-        val days = (1..10).map { it.toString() }
+        val days = (1..7).map { it.toString() }
 
         // Adapters for spinners
         val locationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locations)
