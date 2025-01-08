@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 class UserPage : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ItemAdapter
-    private var itemList: ArrayList<CarAvailableModule> = arrayListOf()
+    private lateinit var adapter: UserCarsAdapter
+    private var itemList: ArrayList<UserCarsModule> = arrayListOf()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,17 +23,17 @@ class UserPage : AppCompatActivity() {
         setContentView(R.layout.activity_user_page)
 
 
-//        val itemList<CarAvailableModule> = listOf("car 1", "car 2", "car 3", "car 4")
-        itemList.add(CarAvailableModule(R.drawable.carimage1, "Car 1"))
-        itemList.add(CarAvailableModule(R.drawable.carimage1, "Car 2"))
-        itemList.add(CarAvailableModule(R.drawable.carimage1, "Car 3"))
-        itemList.add(CarAvailableModule(R.drawable.carimage1, "Car 4"))
+        itemList.add(UserCarsModule(R.drawable.carimage1, "Car 1"))
+        itemList.add(UserCarsModule(R.drawable.carimage1, "Car 2"))
+        itemList.add(UserCarsModule(R.drawable.carimage1, "Car 3"))
+        itemList.add(UserCarsModule(R.drawable.carimage1, "Car 4"))
 
-        val adapter = ItemAdapter(itemList)
+       // val adapter = ItemAdapter(itemList)
         val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
         val destinationSpinner: Spinner = findViewById(R.id.spinnerDestination)
         val daysSpinner: Spinner = findViewById(R.id.spinnerDays)
 
+        adapter = UserCarsAdapter(itemList,this)
         recyclerView = findViewById(R.id.recyclerView1)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter

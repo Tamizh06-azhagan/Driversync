@@ -2,6 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
     android:layout_marginHorizontal="5dp">
 
     <LinearLayout
@@ -24,8 +26,12 @@
             android:textStyle="bold"/>
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/moredetails"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/buttonbackround3"
             android:textColor="@color/white"
             android:text="More details"/>

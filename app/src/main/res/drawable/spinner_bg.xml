@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Shape -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#FFDDC1"/>
-            <corners android:radius="10dp"/>
+            <solid android:color="#FFDDC1" />
+            <corners android:radius="10dp" />
         </shape>
     </item>
 
-    <item android:right="10dp" android:left="10dp">
-        <bitmap
-            android:src="@drawable/drop_down_ic"
-        android:gravity="center_vertical|start" />
-    </item>
+    <!-- Drop-down Icon -->
+    <item
+        android:drawable="@drawable/drop_down_ic"
+        android:gravity="end|center_vertical"
+        android:right="10dp" />
 </layer-list>
