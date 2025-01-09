@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class DriverStatus : AppCompatActivity() {
 
-    private lateinit var adapter : DriverAvailableListAdapter
-    private lateinit var list: ArrayList<DriverAvailableListModule>
+    private lateinit var adapter : ViewAllAdapter
+    private lateinit var list: ArrayList<ViewAllModule>
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class DriverStatus : AppCompatActivity() {
             insets
         }
         list = ArrayList()
-        adapter = DriverAvailableListAdapter(list,this)
+        adapter = ViewAllAdapter(list,this)
         findViewById<RecyclerView>(R.id.recyclerView).layoutManager = LinearLayoutManager(this)
         findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
 
@@ -50,11 +50,11 @@ class DriverStatus : AppCompatActivity() {
 
     private fun loadDrivers() {
 
-        list.add(DriverAvailableListModule(R.drawable.baseline_person_24,"Driver 1"))
-        list.add(DriverAvailableListModule(R.drawable.baseline_person_24,"Driver 2"))
-        list.add(DriverAvailableListModule(R.drawable.baseline_person_24,"Driver 3"))
-        list.add(DriverAvailableListModule(R.drawable.baseline_person_24,"Driver 4"))
-        list.add(DriverAvailableListModule(R.drawable.baseline_person_24,"Driver 5"))
+        list.add(ViewAllModule(R.drawable.baseline_person_24,"Driver 1"))
+        list.add(ViewAllModule(R.drawable.baseline_person_24,"Driver 2"))
+        list.add(ViewAllModule(R.drawable.baseline_person_24,"Driver 3"))
+        list.add(ViewAllModule(R.drawable.baseline_person_24,"Driver 4"))
+        list.add(ViewAllModule(R.drawable.baseline_person_24,"Driver 5"))
 
         adapter.notifyDataSetChanged()
 

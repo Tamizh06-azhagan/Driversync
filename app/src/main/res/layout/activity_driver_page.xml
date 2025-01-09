@@ -93,6 +93,7 @@
                         tools:listitem="@layout/item_driverpage_layout" />
 
                     <Button
+                        android:id="@+id/viewallbutton2"
                         android:layout_width="356dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/ne1"
@@ -199,7 +200,7 @@
                         android:layout_marginBottom="8dp" />
 
                     <EditText
-                        android:id="@+id/editTextTotalAmount"
+                        android:id="@+id/drivertoamt"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:gravity="center"
@@ -234,7 +235,7 @@
                     android:src="@drawable/pi" />
 
                 <Button
-                    android:id="@+id/viewProfileButton"
+                    android:id="@+id/viewProfileButton2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/buttonbackround"

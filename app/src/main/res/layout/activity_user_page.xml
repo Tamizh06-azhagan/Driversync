@@ -32,6 +32,7 @@
         android:text="@string/user_dashboard"
         android:textSize="25sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -79,6 +80,7 @@
             android:background="@drawable/ne1" />
 
         <Button
+            android:id="@+id/viewallbutton1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ne2"
@@ -100,6 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="20dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
 
@@ -155,16 +158,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:textColor="@color/black"
                         android:text="@string/total_amount"
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/editTextTotalAmount"
+                        android:id="@+id/Total"
                         android:layout_width="match_parent"
-                        android:importantForAccessibility="no"
-                        android:autofillHints=""
+                        android:layout_marginHorizontal="10dp"
+                        android:textColor="@color/black"
                         android:layout_height="48dp"
-                        android:inputType="number" />
+                        />
 
 
                 </LinearLayout>
@@ -177,12 +181,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/available_cars"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="20dp"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
                 android:layout_marginBottom="20dp">
@@ -205,6 +212,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/ne"
                 android:gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -213,6 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="Profile"
+                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -224,7 +233,7 @@
                     android:src="@drawable/pi" />
 
                 <Button
-                    android:id="@+id/viewProfileButton"
+                    android:id="@+id/viewProfileButton1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/buttonbackround"

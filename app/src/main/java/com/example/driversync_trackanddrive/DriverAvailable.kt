@@ -2,8 +2,10 @@ package com.example.driversync_trackanddrive
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CalendarView
 import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -13,7 +15,7 @@ class DriverAvailable : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_driver_page) // Replace with your actual layout file
+        setContentView(R.layout.activity_driver_available) // Replace with your actual layout file
 
         // Initialize the button
         val dateButton: Button = findViewById(R.id.datebutton) // Replace with the ID of your date button
@@ -40,6 +42,13 @@ class DriverAvailable : AppCompatActivity() {
                 year, month, day
             )
             datePickerDialog.show()
+
+            findViewById<CalendarView>(R.id.calendarView).setOnDateChangeListener { _, year, month, dayOfMonth ->
+                val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
+                val intent = Intent(this, DriverAvailable::class.java)
+                intent.putExtra("selectedDate", selectedDate)
+                startActivity(intent)
+            }
         }
     }
 }

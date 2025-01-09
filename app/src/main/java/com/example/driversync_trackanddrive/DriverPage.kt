@@ -1,8 +1,10 @@
 package com.example.driversync_trackanddrive
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +22,15 @@ class DriverPage : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewdriver)
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        findViewById<Button>(R.id.viewProfileButton2).setOnClickListener {
+            val intent = Intent(this, Profilepage::class.java)
+            startActivity(intent)
+        }
+        findViewById<Button>(R.id.viewallbutton2).setOnClickListener(){
+            val intent = Intent(this, ViewallPage::class.java)
+            startActivity(intent)
+        }
 
         val itemList = listOf("User name 1", "User name 2", "User name 3", "User name 4",)
         val adapter = DriverJobsAdapter(itemList)
@@ -60,4 +71,5 @@ class DriverPage : AppCompatActivity() {
 
         }
     }
+
 }
