@@ -109,18 +109,38 @@
         app:layout_constraintTop_toBottomOf="@id/usernameuserbutton" />
 
     <!-- Password Input -->
+
+    <!-- Signup Button -->
+
+    <EditText
+        android:id="@+id/cnumber"
+        android:layout_width="212dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/ne"
+        android:drawableLeft="@drawable/baseline_contact_phone_24"
+        android:drawablePadding="8dp"
+        android:hint="Contact number"
+        android:inputType="number"
+        android:paddingStart="5dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailbutton" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwrdlay"
         android:layout_width="212dp"
         android:layout_height="47dp"
-        android:layout_marginTop="16dp"
-        app:boxStrokeWidth="2dp"
-        app:boxStrokeColor="#FF6200EE"
-        app:passwordToggleEnabled="true"
+        android:layout_marginTop="92dp"
         android:background="@drawable/ne"
+        app:boxStrokeColor="#FF6200EE"
+        app:boxStrokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/emailbutton">
+        app:layout_constraintTop_toBottomOf="@id/emailbutton"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwrd"
@@ -136,16 +156,16 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Signup Button -->
     <Button
         android:id="@+id/Usersignupbutton"
         android:layout_width="150dp"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/buttonbackround"
         android:text="Signup"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwrdlay" />
 

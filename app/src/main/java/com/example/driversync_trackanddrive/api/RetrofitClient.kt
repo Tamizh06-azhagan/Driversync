@@ -29,5 +29,10 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)  // Set custom OkHttpClient
             .build()
+
     }
+
 }
+
+
+

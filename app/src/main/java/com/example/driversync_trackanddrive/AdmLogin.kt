@@ -1,5 +1,6 @@
 package com.example.driversync_trackanddrive
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -10,6 +11,7 @@ import com.google.android.material.textfield.TextInputEditText
 
 class AdmLogin : AppCompatActivity() {
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admlogin) // Replace with your XML layout name
@@ -18,6 +20,12 @@ class AdmLogin : AppCompatActivity() {
         val usernameEditText: EditText = findViewById(R.id.username)
         val passwordEditText: TextInputEditText = findViewById(R.id.passwrd)
         val loginButton: Button = findViewById(R.id.logbutton)
+        val signupButton: Button = findViewById(R.id.sign)
+        signupButton.setOnClickListener {
+            val intent = Intent(this, Signup::class.java)
+            startActivity(intent)
+        }
+
 
         // Handle Login Button Click
         loginButton.setOnClickListener {
@@ -41,6 +49,7 @@ class AdmLogin : AppCompatActivity() {
         // Example validation logic
         return username == "admin" && password == "password"
     }
+
 
     // Handle Back Button Press
     override fun onBackPressed() {
