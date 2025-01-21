@@ -1,15 +1,13 @@
 package com.example.driversync_trackanddrive.api
 
+import com.example.driversync_trackanddrive.response.InsertResponse
 import com.example.driversync_trackanddrive.response.PriceResponse
-import com.example.driversync_trackanddrive.response.SignupRequest
 import com.example.driversync_trackanddrive.response.SignupResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -35,6 +33,14 @@ interface ApiService {
         @Part("contact_number") contactNumber: RequestBody,
         @Part image: MultipartBody.Part
     ): Call<SignupResponse>
+
+    @FormUrlEncoded
+    @POST("driver_sync_api/insertavailability.php")
+    fun updateAvailability(
+        @Field("userid") userId: Int,
+        @Field("availability") availability: String,
+        @Field("availability_date") availabilityDate: String
+    ): Call<InsertResponse>
 
 }
 

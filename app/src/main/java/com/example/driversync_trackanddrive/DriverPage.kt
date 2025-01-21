@@ -73,3 +73,74 @@ class DriverPage : AppCompatActivity() {
     }
 
 }
+
+
+class MainActivity : AppCompatActivity() {
+
+    private val userId = 1 // Replace with dynamic user ID if needed
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val calendarView = findViewById<CalendarView>(R.id.calendarView)
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            // Format the selected date
+            val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
+
+            // Show confirmation popup
+            showConfirmationDialog(selectedDate)
+        }
+    }
+
+    private fun showConfirmationDialog(selectedDate: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Set Availability")
+        builder.setMessage("Are you available on $selectedDate?")
+        builder.setPositiveButton("Yes") { _, _ ->
+            updateAvailability(selectedDate, "Yes")
+        }
+        builder.setNegativeButton("No", null)
+        builder.show()
+    }
+
+    private fun updateAvailability(date: String, availability: String) {
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+        val call = apiService.updateAvailability(userId, availability, date)
+
+        call.enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.status) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            apiResponse.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Failed to update availability.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Response not successful: ${response.code()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Error: ${t.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+}

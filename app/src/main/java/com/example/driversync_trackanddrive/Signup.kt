@@ -74,7 +74,8 @@ class Signup : AppCompatActivity() {
             data?.data?.let { uri ->
                 selectedImageUri = uri
                 selectedFile = getFileFromUri(uri)
-                Toast.makeText(this, "Image Selected: ${getFileName(uri)}", Toast.LENGTH_SHORT).show()
+                findViewById<ImageView>(R.id.imageProfile).setImageURI(uri)
+//                Toast.makeText(this, "Image Selected: ${getFileName(uri)}", Toast.LENGTH_SHORT).show()
             }
         }
     }
