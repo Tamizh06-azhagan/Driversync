@@ -3,77 +3,79 @@ package com.example.driversync_trackanddrive
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.Spinner
-import androidx.activity.enableEdgeToEdge
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.driversync_trackanddrive.api.ApiService
+import com.example.driversync_trackanddrive.api.RetrofitClient
+import com.example.driversync_trackanddrive.response.InsertResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DriverPage : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_driver_page)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewdriver)
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        findViewById<Button>(R.id.viewProfileButton2).setOnClickListener {
-            val intent = Intent(this, Profilepage::class.java)
-            startActivity(intent)
-        }
-        findViewById<Button>(R.id.viewallbutton2).setOnClickListener(){
-            val intent = Intent(this, ViewallPage::class.java)
-            startActivity(intent)
-        }
-
-        val itemList = listOf("User name 1", "User name 2", "User name 3", "User name 4",)
+        val itemList = listOf("User name 1", "User name 2", "User name 3", "User name 4")
         val adapter = DriverJobsAdapter(itemList)
         recyclerView.adapter = adapter
+
+        setupSpinners()
+        setupNavigation()
+    }
+
+    private fun setupSpinners() {
         val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
         val destinationSpinner: Spinner = findViewById(R.id.spinnerDestination)
         val daysSpinner: Spinner = findViewById(R.id.spinnerDays)
 
-        // Data for spinners
         val locations = listOf(
             "Choose City",
             "Chennai",
             "Kanchipuram",
             "Vellore",
-            "Ranipet",
             "Chengalpet",
             "Villupuram",
             "Thiruvannamalai",
             "Bengaluru",
             "Tirupati",
-            "Thiruvallur",
             "Pondicherry"
         )
+
         val days = (1..10).map { it.toString() }
 
-        // Adapters for spinners
         val locationAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locations)
         val daysAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, days)
 
-        // Set adapters
         originSpinner.adapter = locationAdapter
         destinationSpinner.adapter = locationAdapter
         daysSpinner.adapter = daysAdapter
+    }
+
+    private fun setupNavigation() {
+        findViewById<Button>(R.id.viewProfileButton2).setOnClickListener {
+            startActivity(Intent(this, Profilepage::class.java))
+        }
+
+        findViewById<Button>(R.id.viewallbutton2).setOnClickListener {
+            startActivity(Intent(this, ViewallPage::class.java))
+        }
 
         findViewById<ImageButton>(R.id.backButton).setOnClickListener {
             finish()
-
         }
     }
-
 }
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -81,14 +83,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_driver_page)
 
         val calendarView = findViewById<CalendarView>(R.id.calendarView)
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            // Format the selected date
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
-
-            // Show confirmation popup
             showConfirmationDialog(selectedDate)
         }
     }
@@ -100,7 +99,9 @@ class MainActivity : AppCompatActivity() {
         builder.setPositiveButton("Yes") { _, _ ->
             updateAvailability(selectedDate, "Yes")
         }
-        builder.setNegativeButton("No", null)
+        builder.setNegativeButton("No") { _, _ ->
+            updateAvailability(selectedDate, "No")
+        }
         builder.show()
     }
 
@@ -108,8 +109,8 @@ class MainActivity : AppCompatActivity() {
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         val call = apiService.updateAvailability(userId, availability, date)
 
-        call.enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+        call.enqueue(object : Callback<InsertResponse> {
+            override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.status) {
@@ -134,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+            override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
                 Toast.makeText(
                     this@MainActivity,
                     "Error: ${t.message}",

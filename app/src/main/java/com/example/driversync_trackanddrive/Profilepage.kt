@@ -1,7 +1,9 @@
 package com.example.driversync_trackanddrive
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +15,15 @@ class Profilepage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profilepage)
+        // Find the logout button by its ID
+        val logoutButton: Button = findViewById(R.id.logoutbutton)
+
+        // Set an OnClickListener for the button
+        logoutButton.setOnClickListener {
+            // Create an Intent to navigate to AdmLogin activity
+            val intent = Intent(this, AdmLogin::class.java)
+            startActivity(intent) // Start the AdmLogin activity
+        }
 
         // Apply window insets for proper layout adjustment with system UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->

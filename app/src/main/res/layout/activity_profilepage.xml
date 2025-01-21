@@ -69,6 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <Button
+        android:id="@+id/logoutbutton"
         android:layout_width="285dp"
         android:layout_height="64dp"
         android:layout_marginTop="23dp"
