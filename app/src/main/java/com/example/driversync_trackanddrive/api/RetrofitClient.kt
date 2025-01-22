@@ -6,7 +6,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object RetrofitClient {
+object
+
+
+RetrofitClient {
     private const val BASE_URL = "https://f1zb9822-80.inc1.devtunnels.ms/"
 
     private val httpClient = OkHttpClient.Builder()
