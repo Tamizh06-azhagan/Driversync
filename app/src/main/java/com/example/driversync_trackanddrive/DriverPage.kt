@@ -1,6 +1,6 @@
 package com.example.driversync_trackanddrive
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
@@ -17,9 +17,14 @@ import retrofit2.Response
 
 class DriverPage : AppCompatActivity() {
 
+    lateinit var context: Context
+    private var userId = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_driver_page)
+
+        context = this
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewdriver)
         recyclerView.layoutManager =
@@ -28,6 +33,12 @@ class DriverPage : AppCompatActivity() {
         val itemList = listOf("User name 1", "User name 2", "User name 3", "User name 4")
         val adapter = DriverJobsAdapter(itemList)
         recyclerView.adapter = adapter
+
+        val calendarView = findViewById<CalendarView>(R.id.calendarView)
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
+            showConfirmationDialog(selectedDate, context as DriverPage,userId)
+        }
 
         setupSpinners()
         setupNavigation()
@@ -62,6 +73,7 @@ class DriverPage : AppCompatActivity() {
         daysSpinner.adapter = daysAdapter
     }
 
+
     private fun setupNavigation() {
         findViewById<Button>(R.id.viewProfileButton2).setOnClickListener {
             startActivity(Intent(this, Profilepage::class.java))
@@ -77,71 +89,55 @@ class DriverPage : AppCompatActivity() {
     }
 }
 
-class MainActivity : AppCompatActivity() {
-
-    private val userId = 1 // Replace with dynamic user ID if needed
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_driver_page)
-
-        val calendarView = findViewById<CalendarView>(R.id.calendarView)
-        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
-            showConfirmationDialog(selectedDate)
-        }
+private fun showConfirmationDialog(selectedDate: String, context: DriverPage, userId: Int) {
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle("Set Availability")
+    builder.setMessage("Are you available on $selectedDate?")
+    builder.setPositiveButton("Yes") { _, _ ->
+        updateAvailability(selectedDate, "Yes",userId,context)
     }
-
-    private fun showConfirmationDialog(selectedDate: String) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Set Availability")
-        builder.setMessage("Are you available on $selectedDate?")
-        builder.setPositiveButton("Yes") { _, _ ->
-            updateAvailability(selectedDate, "Yes")
-        }
-        builder.setNegativeButton("No") { _, _ ->
-            updateAvailability(selectedDate, "No")
-        }
-        builder.show()
+    builder.setNegativeButton("No") { _, _ ->
+        updateAvailability(selectedDate, "No", userId, context)
     }
+    builder.show()
+}
 
-    private fun updateAvailability(date: String, availability: String) {
-        val apiService = RetrofitClient.instance.create(ApiService::class.java)
-        val call = apiService.updateAvailability(userId, availability, date)
+private fun updateAvailability(date: String, availability: String, userId: Int, context: DriverPage) {
+    val apiService = RetrofitClient.instance.create(ApiService::class.java)
+    val call = apiService.updateAvailability(userId, availability, date)
 
-        call.enqueue(object : Callback<InsertResponse> {
-            override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    if (apiResponse != null && apiResponse.status) {
-                        Toast.makeText(
-                            this@MainActivity,
-                            apiResponse.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Failed to update availability.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+    call.enqueue(object : Callback<InsertResponse> {
+        override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
+            if (response.isSuccessful) {
+                val apiResponse = response.body()
+                if (apiResponse != null && apiResponse.status) {
+                    Toast.makeText(
+                        context,
+                        apiResponse.message,
+                        Toast.LENGTH_LONG
+                    ).show()
                 } else {
                     Toast.makeText(
-                        this@MainActivity,
-                        "Response not successful: ${response.code()}",
+                        context,
+                        "Failed to update availability.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }
-
-            override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
+            } else {
                 Toast.makeText(
-                    this@MainActivity,
-                    "Error: ${t.message}",
+                    context,
+                    "Response not successful: ${response.code()}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-    }
+        }
+
+        override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
+            Toast.makeText(
+                context,
+                "Error: ${t.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    })
 }

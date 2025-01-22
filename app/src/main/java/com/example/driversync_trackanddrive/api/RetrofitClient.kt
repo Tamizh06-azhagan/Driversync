@@ -16,7 +16,6 @@ object RetrofitClient {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             addInterceptor(loggingInterceptor)
 
-            // Set timeouts
             connectTimeout(60, TimeUnit.SECONDS) // Connection timeout
             readTimeout(60, TimeUnit.SECONDS)    // Read timeout
             writeTimeout(60, TimeUnit.SECONDS)   // Write timeout

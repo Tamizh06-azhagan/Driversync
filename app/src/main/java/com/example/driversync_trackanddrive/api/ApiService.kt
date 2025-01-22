@@ -1,6 +1,7 @@
 package com.example.driversync_trackanddrive.api
 
 import com.example.driversync_trackanddrive.response.InsertResponse
+import com.example.driversync_trackanddrive.response.LoginResponse
 import com.example.driversync_trackanddrive.response.PriceResponse
 import com.example.driversync_trackanddrive.response.SignupResponse
 import okhttp3.MultipartBody
@@ -12,7 +13,8 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
-interface ApiService {
+interface
+ApiService {
 
     @FormUrlEncoded
     @POST("driver_sync_api/price.php")
@@ -39,9 +41,17 @@ interface ApiService {
     fun updateAvailability(
         @Field("userid") userId: Int,
         @Field("availability") availability: String,
-        @Field("availability_date") availabilityDate: String
+        @Field("availability" +
+                "_date") availabilityDate: String
     ): Call<InsertResponse>
 
+    @FormUrlEncoded
+    @POST("userlogin.php")
+    fun loginUser(
+        @Field("username") username: String,
+        @Field("password") password: String
+    ): Call<LoginResponse>
 }
+
 
 

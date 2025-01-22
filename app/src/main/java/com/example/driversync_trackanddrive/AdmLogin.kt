@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
+import retrofit2.Call
 
 class AdmLogin : AppCompatActivity() {
 
@@ -59,4 +60,31 @@ class AdmLogin : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+}
+private fun loginUser(username: String, password: String) {
+    val apiService = RetrofitClient.instance.create(ApiService::class.java)
+    val call = apiService.loginUser(username, password)
+
+    call.enqueue(object : Callback<LoginResponse> {
+        override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            if (response.isSuccessful) {
+                val loginResponse = response.body()
+                if (loginResponse != null && loginResponse.status == "success") {
+                    Toast.makeText(this@LoginActivity, loginResponse.message, Toast.LENGTH_LONG).show()
+                    Log.d("API_RESPONSE", "User Data: ${loginResponse.data}")
+                    // Navigate to the next activity or dashboard here
+                } else {
+                    Toast.makeText(this@LoginActivity, "Login failed: ${loginResponse?.message}", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this@LoginActivity, "Response not successful: ${response.code()}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            Toast.makeText(this@LoginActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            Log.e("API_ERROR", t.message.orEmpty())
+        }
+    })
+}
 }
