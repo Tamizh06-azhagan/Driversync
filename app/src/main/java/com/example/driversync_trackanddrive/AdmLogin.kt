@@ -61,6 +61,12 @@ class AdmLogin : AppCompatActivity() {
                         Toast.makeText(this@AdmLogin, loginResponse.message, Toast.LENGTH_LONG).show()
                         Log.d("API_RESPONSE", "User Data: ${loginResponse.data}")
 
+                        if(loginResponse.data?.role=="User" ){
+                            val intent = Intent(this@AdmLogin, UserPage::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+
                         // Navigate to Admin Dashboard
                         val intent = Intent(this@AdmLogin, AdminPage::class.java)
                         startActivity(intent)
