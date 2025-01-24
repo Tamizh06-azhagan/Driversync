@@ -203,10 +203,10 @@
                     <TextView
                         android:id="@+id/drivertoamt"
                         android:layout_width="match_parent"
+                        android:layout_marginHorizontal="10dp"
+                        android:textColor="@color/black"
                         android:layout_height="48dp"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:hint="Enter total amount" />
+                        />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

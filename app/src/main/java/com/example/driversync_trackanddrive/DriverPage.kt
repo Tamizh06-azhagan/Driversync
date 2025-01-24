@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
 import com.example.driversync_trackanddrive.response.InsertResponse
+import com.example.driversync_trackanddrive.response.PriceResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +38,7 @@ class DriverPage : AppCompatActivity() {
         val calendarView = findViewById<CalendarView>(R.id.calendarView)
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
-            showConfirmationDialog(selectedDate, context as DriverPage,userId)
+            showConfirmationDialog(selectedDate, userId)
         }
 
         setupSpinners()
@@ -73,7 +74,6 @@ class DriverPage : AppCompatActivity() {
         daysSpinner.adapter = daysAdapter
     }
 
-
     private fun setupNavigation() {
         findViewById<Button>(R.id.viewProfileButton2).setOnClickListener {
             startActivity(Intent(this, Profilepage::class.java))
@@ -87,57 +87,100 @@ class DriverPage : AppCompatActivity() {
             finish()
         }
     }
-}
 
-private fun showConfirmationDialog(selectedDate: String, context: DriverPage, userId: Int) {
-    val builder = AlertDialog.Builder(context)
-    builder.setTitle("Set Availability")
-    builder.setMessage("Are you available on $selectedDate?")
-    builder.setPositiveButton("Yes") { _, _ ->
-        updateAvailability(selectedDate, "Yes",userId,context)
+    private fun showConfirmationDialog(selectedDate: String, userId: Int) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Set Availability")
+        builder.setMessage("Are you available on $selectedDate?")
+        builder.setPositiveButton("Yes") { _, _ ->
+            updateAvailability(selectedDate, "Yes", userId)
+        }
+        builder.setNegativeButton("No") { _, _ ->
+            updateAvailability(selectedDate, "No", userId)
+        }
+        builder.show()
     }
-    builder.setNegativeButton("No") { _, _ ->
-        updateAvailability(selectedDate, "No", userId, context)
-    }
-    builder.show()
-}
 
-private fun updateAvailability(date: String, availability: String, userId: Int, context: DriverPage) {
-    val apiService = RetrofitClient.instance.create(ApiService::class.java)
-    val call = apiService.updateAvailability(userId, availability, date)
+    private fun updateAvailability(date: String, availability: String, userId: Int) {
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+        val call = apiService.updateAvailability(userId, availability, date)
 
-    call.enqueue(object : Callback<InsertResponse> {
-        override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
-            if (response.isSuccessful) {
-                val apiResponse = response.body()
-                if (apiResponse != null && apiResponse.status) {
-                    Toast.makeText(
-                        context,
-                        apiResponse.message,
-                        Toast.LENGTH_LONG
-                    ).show()
+        call.enqueue(object : Callback<InsertResponse> {
+            override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.status) {
+                        Toast.makeText(
+                            this@DriverPage,
+                            apiResponse.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@DriverPage,
+                            "Failed to update availability.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } else {
                     Toast.makeText(
-                        context,
-                        "Failed to update availability.",
+                        this@DriverPage,
+                        "Response not successful: ${response.code()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            } else {
+            }
+
+            override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
                 Toast.makeText(
-                    context,
-                    "Response not successful: ${response.code()}",
+                    this@DriverPage,
+                    "Error: ${t.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        }
+        })
+    }
 
-        override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
-            Toast.makeText(
-                context,
-                "Error: ${t.message}",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    })
+    private fun calculatePrice(origin: String, destination: String, days: Int) {
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+        val call = apiService.calculatePrice(origin, destination, days)
+
+        call.enqueue(object : Callback<PriceResponse> {
+            override fun onResponse(call: Call<PriceResponse>, response: Response<PriceResponse>) {
+                if (response.isSuccessful) {
+                    val priceResponse = response.body()
+
+                    if (priceResponse != null && priceResponse.status) {
+                        val pricePerDay = priceResponse.price_per_day
+                        val totalAmount = priceResponse.total_amount
+
+                        findViewById<TextView>(R.id.drivertoamt).text = "₹ $totalAmount"
+                    } else {
+                        findViewById<TextView>(R.id.drivertoamt).text = ""
+                        Toast.makeText(
+                            this@DriverPage,
+                            "${priceResponse?.message ?: "Unknown error"}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    findViewById<TextView>(R.id.drivertoamt).text = ""
+                    Toast.makeText(
+                        this@DriverPage,
+                        "Failed to fetch price: ${response.code()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<PriceResponse>, t: Throwable) {
+                findViewById<TextView>(R.id.drivertoamt).text = ""
+                Toast.makeText(
+                    this@DriverPage,
+                    "Error: ${t.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
 }

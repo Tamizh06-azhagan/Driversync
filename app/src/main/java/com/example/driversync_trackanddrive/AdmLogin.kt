@@ -66,15 +66,14 @@ class AdmLogin : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         }
-                        else(loginResponse.data?.role=="Driver"){
+                        if(loginResponse.data?.role=="Driver"){
                             val intent = Intent(this@AdmLogin, DriverPage::class.java)
                             startActivity(intent)
-                            finish()  
+                            finish()
                         }
 
-                        // Navigate to Admin Dashboard
-                        
-                    } else {
+                    }
+                    else {
                         Toast.makeText(this@AdmLogin, "Login failed: ${loginResponse?.message}", Toast.LENGTH_SHORT).show()
                     }
                 } else {
@@ -96,8 +95,4 @@ class AdmLogin : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-}
-
-private operator fun Boolean.invoke(value: Any) {
-
 }
