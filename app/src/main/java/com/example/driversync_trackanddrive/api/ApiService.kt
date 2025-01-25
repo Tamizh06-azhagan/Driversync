@@ -1,5 +1,6 @@
 package com.example.driversync_trackanddrive.api
 
+import com.example.driversync_trackanddrive.response.DriverInfoResponse
 import com.example.driversync_trackanddrive.response.InsertResponse
 import com.example.driversync_trackanddrive.response.LoginResponse
 import com.example.driversync_trackanddrive.response.PriceResponse
@@ -51,7 +52,17 @@ ApiService {
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<LoginResponse>
-}
+
+        @FormUrlEncoded
+        @POST("driver_sync_api/driverinfo.php") // Replace with your endpoint
+        fun addDriverInfo(
+            @Field("userid") userId: String,
+            @Field("age") age: Int,
+            @Field("experience_years") experienceYears: Int,
+            @Field("contact_number") contactNumber: String
+        ): Call<DriverInfoResponse>
+    }
+
 
 
 

@@ -80,8 +80,6 @@ class Signup : AppCompatActivity() {
         }
     }
 
-
-
     private fun registerUser() {
         // Retrieve form inputs
         val name = findViewById<EditText>(R.id.name).text.toString()
@@ -131,6 +129,24 @@ class Signup : AppCompatActivity() {
                     if (signupResponse != null) {
                         Toast.makeText(this@Signup, signupResponse.message, Toast.LENGTH_LONG).show()
                         Log.d("API_RESPONSE", "Message: ${signupResponse.message}")
+
+                        if (signupResponse.status){
+                            // After successful signup, navigate to the appropriate page based on the role
+                            val role = findViewById<Spinner>(R.id.roleSpinner).selectedItem.toString()
+                            if (role == "Driver") {
+                                // Navigate to AddDriverDetails activity
+                                val intent = Intent(this@Signup, Adddriverdetails::class.java)
+                                intent.putExtra("id",""+signupResponse.id)
+                                startActivity(intent)
+                                finish()  // Close the signup activity
+                            } else if (role == "User") {
+                                // Navigate to UserPage activity
+                                val intent = Intent(this@Signup, UserPage::class.java)
+                                startActivity(intent)
+                                finish()  // Close the signup activity
+                            }
+                        }
+
                     } else {
                         Toast.makeText(this@Signup, "Something went wrong!", Toast.LENGTH_SHORT).show()
                     }
@@ -183,5 +199,4 @@ class Signup : AppCompatActivity() {
         }
         return name
     }
-
 }

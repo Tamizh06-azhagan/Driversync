@@ -10,7 +10,7 @@ object
 
 
 RetrofitClient {
-    private const val BASE_URL = "https://f1zb9822-80.inc1.devtunnels.ms//"
+    private const val BASE_URL = "https://f1zb9822-80.inc1.devtunnels.ms/"
 
     private val httpClient = OkHttpClient.Builder()
         .apply {
