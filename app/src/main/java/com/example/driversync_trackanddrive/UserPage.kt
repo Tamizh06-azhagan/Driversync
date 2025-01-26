@@ -49,8 +49,8 @@ class UserPage : AppCompatActivity() {
             startActivity(intent)
         }
 
-        findViewById<Button>(R.id.viewallbutton1).setOnClickListener() {
-            val intent = Intent(this, ViewallPage::class.java)
+        findViewById<Button>(R.id.viewallbutton11).setOnClickListener() {
+            val intent = Intent(this, Booknow::class.java)
             startActivity(intent)
         }
 
