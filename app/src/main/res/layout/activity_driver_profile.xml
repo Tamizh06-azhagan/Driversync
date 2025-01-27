@@ -22,26 +22,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Profile Image -->
-
-    <!-- Name TextView -->
-
-    <!-- Username TextView -->
-
-    <!-- Logout Icon -->
-
-    <!-- Logout Button -->
-
-    <!-- Floating Action Button -->
     <ImageView
         android:id="@+id/imageView21"
         android:layout_width="213dp"
         android:layout_height="153dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/pi"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/backButton34" />
 
+    <!-- Name TextView -->
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="274dp"
@@ -53,10 +44,10 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView21" />
 
+    <!-- Username TextView -->
     <TextView
         android:id="@+id/textView99"
         android:layout_width="274dp"
@@ -68,10 +59,10 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewName" />
 
+    <!-- Logout Icon -->
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="102dp"
@@ -79,10 +70,10 @@
         android:layout_marginTop="44dp"
         android:src="@drawable/baseline_logout_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView99" />
 
+    <!-- Logout Button -->
     <Button
         android:id="@+id/logoutbutton1"
         android:layout_width="285dp"
@@ -93,21 +84,20 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.547"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView3" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!-- Circular Image Button -->
+    <ImageButton
+        android:id="@+id/circularImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_margin="16dp"
-        android:layout_marginEnd="32dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/circular_shape"
+        android:contentDescription="Circular Button"
+        android:scaleType="centerInside"
+        android:src="@drawable/addm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.019"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

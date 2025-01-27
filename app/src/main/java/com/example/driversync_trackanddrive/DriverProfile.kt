@@ -19,6 +19,7 @@ class DriverProfile : AppCompatActivity() {
 
         // Find the logout button by its ID
         val logoutButton: Button = findViewById(R.id.logoutbutton1)
+        val circularImageButton: ImageButton = findViewById(R.id.circularImageButton)
 
         // Set an OnClickListener for the button
         logoutButton.setOnClickListener {
@@ -44,12 +45,11 @@ class DriverProfile : AppCompatActivity() {
             finish() // Close this activity and navigate back
         }
 
-        // Find the FloatingActionButton and set up navigation
-        val floatingActionButton: FloatingActionButton = findViewById(R.id.floatingActionButton)
-        floatingActionButton.setOnClickListener {
+
             // Create an Intent to navigate to the AddDriverActivity
-            val intent = Intent(this, InsertCars::class.java)
-            startActivity(intent) // Start the AddDriverActivity
+            circularImageButton.setOnClickListener {
+                val intent = Intent(this, InsertCars::class.java)
+                startActivity(intent) // Start the AddDriverActivity
+            }
         }
     }
-}

@@ -1,16 +1,13 @@
 package com.example.driversync_trackanddrive
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.driversync_trackanddrive.DriverAvailableListAdapter.ItemViewHolder
 
-class UserCarsAdapter (private val list:ArrayList<UserCarsModule>,private val context: Context) : RecyclerView.Adapter<UserCarsAdapter.ViewHolder>(){
+class UserCarsAdapter(private val list:ArrayList<UserCarsModule>, private val context: Any) : RecyclerView.Adapter<UserCarsAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserCarsAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_cars_layout, parent, false)

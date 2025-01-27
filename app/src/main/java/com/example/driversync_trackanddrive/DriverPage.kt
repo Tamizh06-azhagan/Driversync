@@ -76,7 +76,7 @@ class DriverPage : AppCompatActivity() {
 
     private fun setupNavigation() {
         findViewById<Button>(R.id.viewProfileButton2).setOnClickListener {
-            startActivity(Intent(this, Profilepage::class.java))
+            startActivity(Intent(this, DriverProfile::class.java))
         }
 
         findViewById<Button>(R.id.viewallbutton2).setOnClickListener {

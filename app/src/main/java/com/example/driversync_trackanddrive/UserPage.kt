@@ -1,17 +1,11 @@
 package com.example.driversync_trackanddrive
 
+import FetchingPage
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.CalendarView
-import android.widget.ImageButton
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,44 +20,53 @@ import retrofit2.Response
 class UserPage : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: UserCarsAdapter
-    private var itemList: ArrayList<UserCarsModule> = arrayListOf()
     private lateinit var totAmt: TextView
+    private var itemList: ArrayList<UserCarsModule> = arrayListOf()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_user_page)
-        // Initialize totalAmt
+
+        // Initialize total amount TextView
         totAmt = findViewById(R.id.Total)
 
-
+        // Populate the car list
         itemList.add(UserCarsModule(R.drawable.carimage1, "Car 1"))
         itemList.add(UserCarsModule(R.drawable.carimage1, "Car 2"))
         itemList.add(UserCarsModule(R.drawable.carimage1, "Car 3"))
         itemList.add(UserCarsModule(R.drawable.carimage1, "Car 4"))
 
+        // Set up RecyclerView with the adapter and listener
+        recyclerView = findViewById(R.id.recyclerView1)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val adapter = UserCarsAdapter(itemList, object : UserCarsAdapter.OnItemClickListener {
+            fun onItemClick(item: UserCarsModule) {
+                val intent = Intent(this@UserPage, FetchingPage::class.java)
+                intent.putExtra("carName", item.name) // Pass data to FetchingPage
+                startActivity(intent)
+            }
+        })
+        recyclerView.adapter = adapter
+
+        // Set up buttons
         findViewById<Button>(R.id.viewProfileButton1).setOnClickListener {
-            val intent = Intent(this, Profilepage::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Profilepage::class.java))
+        }
+        findViewById<Button>(R.id.viewallbutton11).setOnClickListener {
+            startActivity(Intent(this, Booknow::class.java))
         }
 
-        findViewById<Button>(R.id.viewallbutton11).setOnClickListener() {
-            val intent = Intent(this, Booknow::class.java)
-            startActivity(intent)
-        }
+        // Set up spinners and calendar
+        setupSpinners()
+        setupCalendar()
+    }
 
-        // val adapter = ItemAdapter(itemList)
+    private fun setupSpinners() {
         val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
         val destinationSpinner: Spinner = findViewById(R.id.spinnerDestination)
         val daysSpinner: Spinner = findViewById(R.id.spinnerDays)
-
-        adapter = UserCarsAdapter(itemList, this)
-        recyclerView = findViewById(R.id.recyclerView1)
-        recyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = adapter
 
         // Data for spinners
         val locations = listOf(
@@ -78,74 +81,43 @@ class UserPage : AppCompatActivity() {
             "Tirupati",
             "Pondicherry"
         )
-
         val days = (1..10).map { it.toString() }
 
-        // Adapters for spinners
-        val locationAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locations)
+        // Set up adapters
+        val locationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locations)
         val daysAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, days)
 
-        // Set adapters
         originSpinner.adapter = locationAdapter
         destinationSpinner.adapter = locationAdapter
         daysSpinner.adapter = daysAdapter
 
-        findViewById<ImageButton>(R.id.backButton1).setOnClickListener {
-            finish()
+        // Set listeners for spinners
+        originSpinner.onItemSelectedListener = createSpinnerListener()
+        destinationSpinner.onItemSelectedListener = createSpinnerListener()
+        daysSpinner.onItemSelectedListener = createSpinnerListener()
+    }
+
+    private fun createSpinnerListener(): AdapterView.OnItemSelectedListener {
+        return object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                setupPriceDetails()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-        findViewById<CalendarView>(R.id.calendarView).setOnDateChangeListener { _, year, month, dayOfMonth ->
+    }
+
+    private fun setupCalendar() {
+        val calendarView: CalendarView = findViewById(R.id.calendarView)
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
             val intent = Intent(this, DriverAvailable::class.java)
             intent.putExtra("selectedDate", selectedDate)
-            startActivity(intent) // Start the DriverStatus activity with the selected date
-        }
-        // Setup spinner item selection listeners
-        setupSpinnerListeners()
-    }
-
-    private fun setupSpinnerListeners() {
-        val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
-        val destinationSpinner: Spinner = findViewById(R.id.spinnerDestination)
-        val daysSpinner: Spinner = findViewById(R.id.spinnerDays)
-
-        originSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                setupPriceDetails() // API call when item is selected
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+            startActivity(intent)
         }
 
-        destinationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                setupPriceDetails()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-
-        daysSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                setupPriceDetails()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+        findViewById<ImageButton>(R.id.backButton1).setOnClickListener {
+            finish()
         }
     }
 
@@ -158,7 +130,7 @@ class UserPage : AppCompatActivity() {
         val destination = destinationSpinner.selectedItem.toString()
         val daysString = daysSpinner.selectedItem.toString()
 
-        // Validate all spinner inputs
+        // Validate inputs
         if (origin != "Choose City" && destination != "Choose City" && daysString.isNotEmpty()) {
             val days = daysString.toIntOrNull()
             if (days != null && days > 0) {
@@ -177,22 +149,16 @@ class UserPage : AppCompatActivity() {
 
         call.enqueue(object : Callback<PriceResponse> {
             override fun onResponse(call: Call<PriceResponse>, response: Response<PriceResponse>) {
-                if (response.isSuccessful) {
-                    if (response.body()?.status == true) {
-                        val priceResponse = response.body()
-
-                        val pricePerDay = priceResponse?.price_per_day
-                        val totalAmount = priceResponse?.total_amount
-
-                        totAmt.text = "₹ " + totalAmount.toString()
-                    } else {
-                        totAmt.text = ""
-                        Toast.makeText(
-                            this@UserPage,
-                            "${response.body()?.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                if (response.isSuccessful && response.body()?.status == true) {
+                    val totalAmount = response.body()?.total_amount
+                    totAmt.text = "₹ $totalAmount"
+                } else {
+                    totAmt.text = ""
+                    Toast.makeText(
+                        this@UserPage,
+                        response.body()?.message ?: "Error fetching price",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -204,8 +170,6 @@ class UserPage : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-
         })
     }
 }
-

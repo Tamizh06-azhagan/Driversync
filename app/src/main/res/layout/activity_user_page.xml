@@ -240,6 +240,42 @@
                     android:text="View Profile"
                     android:textColor="@color/white" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/ne"
+                android:gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/bookkkk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Booking Details"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/reserve" />
+
+                <Button
+                    android:id="@+id/viewdetailsbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttonbackround"
+                    android:text="View Details"
+                    android:textColor="@color/white" />
+            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>
