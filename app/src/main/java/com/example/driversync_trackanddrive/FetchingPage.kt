@@ -1,14 +1,19 @@
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.StrictMode
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.example.driversync_trackanddrive.R
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.concurrent.Executors
 
 class FetchingPage : AppCompatActivity() {
 
@@ -77,10 +82,7 @@ class FetchingPage : AppCompatActivity() {
 
                                 runOnUiThread {
                                     // Update the UI with fetched data
-                                    Glide.with(this@FetchingPage)
-                                        .load(imageUrl)
-                                        .placeholder(R.drawable.placeholder) // Use a placeholder if image is not available
-                                        .into(carImage)
+                                    loadImageFromUrl(imageUrl)
                                     carName.text = name
                                     driverName.text = driver
                                     carCondition.text = condition
@@ -110,5 +112,32 @@ class FetchingPage : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun loadImageFromUrl(imageUrl: String?) {
+        if (imageUrl.isNullOrEmpty()) {
+            carImage.setImageResource(R.drawable.carimage1) // Set placeholder image
+            return
+        }
+
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val url = URL(imageUrl)
+                val connection = url.openConnection() as HttpURLConnection
+                connection.doInput = true
+                connection.connect()
+                val inputStream = connection.inputStream
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                runOnUiThread {
+                    carImage.setImageBitmap(bitmap)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    carImage.setImageResource(R.drawable.carimage1) // Fallback to placeholder if an error occurs
+                }
+            }
+        }
     }
 }

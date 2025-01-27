@@ -21,14 +21,14 @@ class Booknow : AppCompatActivity() {
 
         // Sample data for the adapter
         val userList = arrayListOf(
-            UserListModule(R.drawable.baseline_person_24, "User 1"),
-            UserListModule(R.drawable.baseline_person_24, "User 2"),
-            UserListModule(R.drawable.baseline_person_24, "User 3"),
-            UserListModule(R.drawable.baseline_person_24, "User 4")
+            ViewAllModule(R.drawable.baseline_person_24, "Driver 1"),
+            ViewAllModule(R.drawable.baseline_person_24, "Driver 2"),
+            ViewAllModule(R.drawable.baseline_person_24, "Driver 3"),
+            ViewAllModule(R.drawable.baseline_person_24, "Driver 4")
         )
 
         // Set the adapter to the RecyclerView
-        val adapter = UserListAdapter(userList, this)
+        val adapter = BooknowAdapter(userList, this)
         recyclerView.adapter = adapter
 
         // Back button functionality
@@ -43,7 +43,7 @@ class Booknow : AppCompatActivity() {
                 // Filter the list based on the query
                 query?.let {
                     val filteredList = userList.filter { it.name.contains(query, true) }
-                    recyclerView.adapter = UserListAdapter(ArrayList(filteredList), this@Booknow)
+                    recyclerView.adapter = BooknowAdapter(ArrayList(filteredList), this@Booknow)
                 }
                 return true
             }
