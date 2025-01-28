@@ -41,13 +41,7 @@ class UserPage : AppCompatActivity() {
         // Set up RecyclerView with the adapter and listener
         recyclerView = findViewById(R.id.recyclerView1)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = UserCarsAdapter(itemList, object : UserCarsAdapter.OnItemClickListener {
-            fun onItemClick(item: UserCarsModule) {
-                val intent = Intent(this@UserPage, FetchingPage::class.java)
-                intent.putExtra("carName", item.name) // Pass data to FetchingPage
-                startActivity(intent)
-            }
-        })
+        val adapter = UserCarsAdapter(itemList, this@UserPage)
         recyclerView.adapter = adapter
 
         // Set up buttons
