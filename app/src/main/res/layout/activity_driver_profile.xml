@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bb"
-    tools:context=".DriverProfile">
+    tools:context=".DriverScreens.DriverProfile">
 
     <!-- Back Button -->
     <ImageButton
@@ -22,15 +22,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Profile Image -->
-    <ImageView
-        android:id="@+id/imageView21"
-        android:layout_width="213dp"
-        android:layout_height="153dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/pi"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="90dp"
+        app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backButton34" />
+        app:layout_constraintTop_toBottomOf="@id/backButton34" >
+        <ImageView
+            android:id="@+id/imageProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </androidx.cardview.widget.CardView>
 
     <!-- Name TextView -->
     <TextView
@@ -45,7 +52,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView21" />
+        app:layout_constraintTop_toBottomOf="@id/view" />
 
     <!-- Username TextView -->
     <TextView
@@ -62,42 +69,61 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewName" />
 
-    <!-- Logout Icon -->
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="102dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="44dp"
-        android:src="@drawable/baseline_logout_24"
+    <!-- Container for ADD YOUR CARS Button with ImageButton -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/addCarContainer"
+        android:layout_width="285dp"
+        android:layout_height="64dp"
+        android:background="@drawable/buttonbackround"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView99" />
+        app:layout_constraintTop_toBottomOf="@id/textView99">
+
+        <!-- ADD YOUR CARS Text -->
+
+        <!-- ImageButton inside ADD YOUR CARS Button -->
+        <TextView
+            android:id="@+id/addCarsText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="ADD YOUR CARS"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/addCarButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/addCarButton"
+            android:layout_width="66dp"
+            android:layout_height="53dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:outlineAmbientShadowColor="@color/white"
+            android:scaleType="centerInside"
+            android:src="@drawable/baseline_add_circle_outline_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/addCarsText"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Logout Button -->
     <Button
         android:id="@+id/logoutbutton1"
         android:layout_width="285dp"
         android:layout_height="64dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/buttonbackround"
-        android:text="Log OUT"
+        android:text="LOG OUT"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView3" />
-
-    <!-- Circular Image Button -->
-    <ImageButton
-        android:id="@+id/circularImageButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/circular_shape"
-        android:contentDescription="Circular Button"
-        android:scaleType="centerInside"
-        android:src="@drawable/addm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/addCarContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

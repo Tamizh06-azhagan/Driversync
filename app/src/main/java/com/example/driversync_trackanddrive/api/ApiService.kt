@@ -1,6 +1,10 @@
 package com.example.driversync_trackanddrive.api
 
+import com.example.driversync_trackanddrive.model.Car
+import com.example.driversync_trackanddrive.model.CarResponse
+import com.example.driversync_trackanddrive.model.TouchAvailabilityResponse
 import com.example.driversync_trackanddrive.response.DriverInfoResponse
+import com.example.driversync_trackanddrive.response.GetAvailableDriversResponse
 import com.example.driversync_trackanddrive.response.InsertResponse
 import com.example.driversync_trackanddrive.response.LoginResponse
 import com.example.driversync_trackanddrive.response.PriceResponse
@@ -8,8 +12,11 @@ import com.example.driversync_trackanddrive.response.SignupResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -42,8 +49,10 @@ ApiService {
     fun updateAvailability(
         @Field("userid") userId: Int,
         @Field("availability") availability: String,
-        @Field("availability" +
-                "_date") availabilityDate: String
+        @Field(
+            "availability" +
+                    "_date"
+        ) availabilityDate: String
     ): Call<InsertResponse>
 
     @FormUrlEncoded
@@ -53,15 +62,26 @@ ApiService {
         @Field("password") password: String
     ): Call<LoginResponse>
 
-        @FormUrlEncoded
-        @POST("driver_sync_api/driverinfo.php") // Replace with your endpoint
-        fun addDriverInfo(
-            @Field("userid") userId: String,
-            @Field("age") age: Int,
-            @Field("experience_years") experienceYears: Int,
-            @Field("contact_number") contactNumber: String
-        ): Call<DriverInfoResponse>
-    }
+    @FormUrlEncoded
+    @POST("driver_sync_api/driverinfo.php") // Replace with your endpoint
+    fun addDriverInfo(
+        @Field("userid") userId: String,
+        @Field("age") age: Int,
+        @Field("experience_years") experienceYears: Int,
+        @Field("contact_number") contactNumber: String
+    ): Call<DriverInfoResponse>
+
+    @FormUrlEncoded
+    @POST("driver_sync_api/touchavailability.php")
+    fun getAvailableDrivers(@Field("availability_date") availabilityDate: String): Call<GetAvailableDriversResponse>
+
+    @GET("driver_sync_api/fetchcars.php")
+    fun getCars(): Call<CarResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("driver_sync_api/cars.php")
+    fun insertCar(@Body car: Car): Call<CarResponse>
+}
 
 
 
