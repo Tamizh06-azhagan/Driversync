@@ -82,7 +82,7 @@
         android:background="@drawable/ne"
         android:padding="12dp"
         android:textColor="@color/black"
-        android:drawableEnd="@drawable/baseline_contact_phone_24"
+        android:drawableEnd="@drawable/baseline_call_24"
         android:text="Contact Number"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"

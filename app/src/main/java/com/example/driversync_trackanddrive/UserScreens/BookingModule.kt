@@ -1,6 +1,6 @@
 package com.example.bookingdetails
 
-data class Booking(
+data class BookingModule(
     val id: Int,
     val driverName: String,
     val status: String

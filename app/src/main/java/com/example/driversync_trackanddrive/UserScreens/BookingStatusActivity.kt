@@ -1,7 +1,5 @@
 package com.example.driversync_trackanddrive.UserScreens
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.Toast
@@ -23,7 +21,6 @@ class BookingStatusActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_booking_details)
 
         backButton = findViewById(R.id.backButton340)
@@ -34,22 +31,21 @@ class BookingStatusActivity : AppCompatActivity() {
         rvBookings.layoutManager = LinearLayoutManager(this)
         rvBookings.adapter = bookingsAdapter
 
-        backButton.setOnClickListener {
-            finish() // Go back to the previous activity
-        }
+        backButton.setOnClickListener { finish() }
 
         // Fetch booking details
         fetchBookingDetails()
     }
 
     private fun fetchBookingDetails() {
-        val userId = intent.getIntExtra("USER_ID", -1) // Retrieve user ID from intent
+        val userId = intent.getIntExtra("USER_ID", -1)
         if (userId == -1) {
             Toast.makeText(this, "Invalid User ID", Toast.LENGTH_SHORT).show()
             finish()
+            return
         }
 
-        val url = "http://localhost/driver_sync_api/bookingdetails.php"
+        val url = "http://10.0.2.2/driver_sync_api/bookingdetails.php" // Use 10.0.2.2 for emulator
 
         val client = OkHttpClient()
         val requestBody = FormBody.Builder()
@@ -100,13 +96,4 @@ class BookingStatusActivity : AppCompatActivity() {
             }
         })
     }
-}
-
-
-
-// Example of navigation from another activity
-fun navigateToBookingDetails(context: Context, userId: Int) {
-    val intent = Intent(context, BookingStatusActivity::class.java)
-    intent.putExtra("USER_ID", userId)
-    context.startActivity(intent)
 }

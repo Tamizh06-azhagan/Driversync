@@ -1,6 +1,6 @@
 package com.example.driversync_trackanddrive.response
 
-data class DriverInfoResponse(
+data class DriverResponse(
     val status: Boolean,
     val message: String,
     val userid: String
