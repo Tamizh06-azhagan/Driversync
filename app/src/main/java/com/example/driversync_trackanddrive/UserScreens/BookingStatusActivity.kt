@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookingdetails.Booking
+import com.example.bookingdetails.BookingModule
 import com.example.driversync_trackanddrive.R
 import okhttp3.*
 import org.json.JSONArray
@@ -17,7 +17,7 @@ class BookingStatusActivity : AppCompatActivity() {
     private lateinit var backButton: ImageButton
     private lateinit var rvBookings: RecyclerView
     private lateinit var bookingsAdapter: BookingAdapter
-    private val bookingsList = mutableListOf<Booking>()
+    private val bookingsList = mutableListOf<BookingModule>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +78,7 @@ class BookingStatusActivity : AppCompatActivity() {
                     bookingsList.clear()
                     for (i in 0 until jsonArray.length()) {
                         val jsonObject = jsonArray.getJSONObject(i)
-                        val booking = Booking(
+                        val booking = BookingModule(
                             jsonObject.getInt("booking_id"),
                             jsonObject.getString("drivername"),
                             jsonObject.getString("status")
