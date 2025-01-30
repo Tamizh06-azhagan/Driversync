@@ -23,6 +23,7 @@ class BookingStatusActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_booking_details)
 
         backButton = findViewById(R.id.backButton340)
@@ -46,7 +47,6 @@ class BookingStatusActivity : AppCompatActivity() {
         if (userId == -1) {
             Toast.makeText(this, "Invalid User ID", Toast.LENGTH_SHORT).show()
             finish()
-            return
         }
 
         val url = "http://localhost/driver_sync_api/bookingdetails.php"

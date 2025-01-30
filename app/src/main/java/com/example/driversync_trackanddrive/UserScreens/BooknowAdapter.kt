@@ -17,7 +17,7 @@ class BooknowAdapter(
 ) : RecyclerView.Adapter<BooknowAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.name89)
+        val textView: TextView = itemView.findViewById(R.id.driverName)
         val imageView: ImageView = itemView.findViewById(R.id.profileui)
     }
 

@@ -1,13 +1,19 @@
 package com.example.driversync_trackanddrive.UserScreens
 
+import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.driversync_trackanddrive.R
+import com.example.driversync_trackanddrive.api.RetrofitClient.BASE_URL
+import com.example.driversync_trackanddrive.api.RetrofitClient.BASE_URL_IMAGE
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -42,17 +48,29 @@ class FetchingPage : AppCompatActivity() {
         }
 
         // Get car ID passed from the UserPage
-        val carId = intent.getIntExtra("car_id", -1)
+        val carId = intent.getStringExtra("car_id")
 
-        if (carId != -1) {
+        if (carId != null) {
             fetchCarDetails(carId)
         } else {
             Toast.makeText(this, "Invalid car ID.", Toast.LENGTH_SHORT).show()
         }
+
+        contactNumber.setOnClickListener {
+            val phoneNumber = contactNumber.text.toString().trim()
+            if (phoneNumber.isNotEmpty()) {
+                val intent = Intent(Intent.ACTION_DIAL)
+                intent.data = Uri.parse("tel:$phoneNumber")
+                startActivity(intent)
+            }
+        }
+
+
     }
 
-    private fun fetchCarDetails(carId: Int) {
-        val url = "http://your_server_url/fetch_car_details.php?car_id=$carId" // Replace with your server URL
+    private fun fetchCarDetails(carId: String) {
+        val url =
+            BASE_URL_IMAGE + "fetchsinglecar.php?car_id=$carId" // Replace with your server URL
         val client = OkHttpClient()
 
         val request = Request.Builder().url(url).build()
@@ -60,7 +78,12 @@ class FetchingPage : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(this@FetchingPage, "Failed to fetch car details.", Toast.LENGTH_SHORT).show()
+                    Log.d("TAG", "onFailure: " + e.message)
+                    Toast.makeText(
+                        this@FetchingPage,
+                        "Failed to fetch car details.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -75,13 +98,12 @@ class FetchingPage : AppCompatActivity() {
                             if (status) {
                                 val data = json.optJSONObject("data")
                                 val imageUrl = data?.optString("image_path", "")
-                                val name = data?.optString("name", "N/A")
+                                val name = data?.optString("car_name", "N/A")
                                 val driver = data?.optString("driver_name", "N/A")
-                                val condition = data?.optString("car_condition", "N/A")
-                                val contact = data?.optString("contact_number", "N/A")
+                                val condition = data?.optString("condition", "N/A")
+                                val contact = data?.optString("contactnumber", "N/A")
 
                                 runOnUiThread {
-                                    // Update the UI with fetched data
                                     loadImageFromUrl(imageUrl)
                                     carName.text = name
                                     driverName.text = driver
@@ -91,23 +113,36 @@ class FetchingPage : AppCompatActivity() {
                             } else {
                                 val message = json.optString("message", "Something went wrong.")
                                 runOnUiThread {
-                                    Toast.makeText(this@FetchingPage, message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@FetchingPage, message, Toast.LENGTH_SHORT)
+                                        .show()
                                 }
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
                             runOnUiThread {
-                                Toast.makeText(this@FetchingPage, "Failed to parse data.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@FetchingPage,
+                                    "Failed to parse data.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     } else {
                         runOnUiThread {
-                            Toast.makeText(this@FetchingPage, "Empty response from server.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@FetchingPage,
+                                "Empty response from server.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 } else {
                     runOnUiThread {
-                        Toast.makeText(this@FetchingPage, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@FetchingPage,
+                            "Error: ${response.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -116,7 +151,11 @@ class FetchingPage : AppCompatActivity() {
 
     private fun loadImageFromUrl(imageUrl: String?) {
         if (imageUrl.isNullOrEmpty()) {
-            carImage.setImageResource(R.drawable.carimage1) // Set placeholder image
+            Glide.with(applicationContext)
+                .load(BASE_URL_IMAGE+imageUrl)
+                .placeholder(R.drawable.carimage1)
+                .error(R.drawable.carimage1)
+                .into(carImage)
             return
         }
 

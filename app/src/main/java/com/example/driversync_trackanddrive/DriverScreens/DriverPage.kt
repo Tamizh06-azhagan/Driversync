@@ -1,5 +1,6 @@
 package com.example.driversync_trackanddrive.DriverScreens
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -21,12 +22,19 @@ class DriverPage : AppCompatActivity() {
 
     lateinit var context: Context
     private var userId = 1
+    private lateinit var totAmt: TextView
+    private lateinit var originSpinner: Spinner
+    private lateinit var destinationSpinner: Spinner
+    private lateinit var daysSpinner: Spinner
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_driver_page)
 
         context = this
+
+        totAmt = findViewById(R.id.drivertoamt)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewdriver)
         recyclerView.layoutManager =
@@ -47,9 +55,9 @@ class DriverPage : AppCompatActivity() {
     }
 
     private fun setupSpinners() {
-        val originSpinner: Spinner = findViewById(R.id.spinnerOrigin)
-        val destinationSpinner: Spinner = findViewById(R.id.spinnerDestination)
-        val daysSpinner: Spinner = findViewById(R.id.spinnerDays)
+        originSpinner = findViewById(R.id.spinnerOrigin)
+        destinationSpinner = findViewById(R.id.spinnerDestination)
+        daysSpinner = findViewById(R.id.spinnerDays)
 
         val locations = listOf(
             "Choose City",
@@ -73,6 +81,19 @@ class DriverPage : AppCompatActivity() {
         originSpinner.adapter = locationAdapter
         destinationSpinner.adapter = locationAdapter
         daysSpinner.adapter = daysAdapter
+
+        // Set up listener for any spinner change
+        val spinnerListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                setupPriceDetails()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        originSpinner.onItemSelectedListener = spinnerListener
+        destinationSpinner.onItemSelectedListener = spinnerListener
+        daysSpinner.onItemSelectedListener = spinnerListener
     }
 
     private fun setupNavigation() {
@@ -107,7 +128,10 @@ class DriverPage : AppCompatActivity() {
         val call = apiService.updateAvailability(userId, availability, date)
 
         call.enqueue(object : Callback<InsertResponse> {
-            override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
+            override fun onResponse(
+                call: Call<InsertResponse>,
+                response: Response<InsertResponse>
+            ) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.status) {
@@ -142,43 +166,48 @@ class DriverPage : AppCompatActivity() {
         })
     }
 
+    private fun setupPriceDetails() {
+        val origin = originSpinner.selectedItem.toString()
+        val destination = destinationSpinner.selectedItem.toString()
+        val daysString = daysSpinner.selectedItem.toString()
+
+        // Validate inputs
+        if (origin != "Choose City" && destination != "Choose City" && daysString.isNotEmpty()) {
+            val days = daysString.toIntOrNull()
+            if (days != null && days > 0) {
+                calculatePrice(origin, destination, days)
+            } else {
+                totAmt.text = "Invalid days selected"
+            }
+        } else {
+            totAmt.text = "Please select valid options"
+        }
+    }
+
     private fun calculatePrice(origin: String, destination: String, days: Int) {
-        val apiService = RetrofitClient.instance.create(ApiService::class.java)
-        val call = apiService.calculatePrice(origin, destination, days)
+        val call = RetrofitClient.instance.create(ApiService::class.java)
+            .calculatePrice(origin, destination, days)
 
         call.enqueue(object : Callback<PriceResponse> {
             override fun onResponse(call: Call<PriceResponse>, response: Response<PriceResponse>) {
-                if (response.isSuccessful) {
-                    val priceResponse = response.body()
-
-                    if (priceResponse != null && priceResponse.status) {
-                        val pricePerDay = priceResponse.price_per_day
-                        val totalAmount = priceResponse.total_amount
-
-                        findViewById<TextView>(R.id.drivertoamt).text = "₹ $totalAmount"
-                    } else {
-                        findViewById<TextView>(R.id.drivertoamt).text = ""
-                        Toast.makeText(
-                            this@DriverPage,
-                            "${priceResponse?.message ?: "Unknown error"}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                if (response.isSuccessful && response.body()?.status == true) {
+                    val totalAmount = response.body()?.total_amount
+                    totAmt.text = "₹ $totalAmount"
                 } else {
-                    findViewById<TextView>(R.id.drivertoamt).text = ""
+                    totAmt.text = ""
                     Toast.makeText(
                         this@DriverPage,
-                        "Failed to fetch price: ${response.code()}",
+                        response.body()?.message ?: "Error fetching price",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
             override fun onFailure(call: Call<PriceResponse>, t: Throwable) {
-                findViewById<TextView>(R.id.drivertoamt).text = ""
+                totAmt.text = ""
                 Toast.makeText(
                     this@DriverPage,
-                    "Error: ${t.message}",
+                    "Failed to fetch price: ${t.localizedMessage}",
                     Toast.LENGTH_SHORT
                 ).show()
             }

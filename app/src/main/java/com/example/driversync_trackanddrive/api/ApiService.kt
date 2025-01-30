@@ -78,9 +78,14 @@ ApiService {
     @GET("driver_sync_api/fetchcars.php")
     fun getCars(): Call<CarResponse>
 
-    @Headers("Content-Type: application/json")
+    @Multipart
     @POST("driver_sync_api/cars.php")
-    fun insertCar(@Body car: Car): Call<CarResponse>
+    fun uploadCar(
+        @Part("userid") userId: RequestBody,
+        @Part("car_name") carName: RequestBody,
+        @Part("condition") condition: RequestBody,
+        @Part image: MultipartBody.Part
+    ): Call<InsertResponse>
 }
 
 

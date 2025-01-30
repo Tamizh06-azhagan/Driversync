@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookingdetails.Booking
 import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
@@ -56,6 +57,9 @@ class UserPage : AppCompatActivity() {
         }
         findViewById<Button>(R.id.viewallbutton11).setOnClickListener {
             startActivity(Intent(this, Booknow::class.java))
+        }
+        findViewById<Button>(R.id.viewdetailsbutton).setOnClickListener {
+            startActivity(Intent(this,  BookingStatusActivity::class.java))
         }
 
         // Set up spinners and calendar

@@ -6,11 +6,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object
-
-
-RetrofitClient {
-    private const val BASE_URL = "https://f1zb9822-80.inc1.devtunnels.ms/"
+object RetrofitClient {
+    const val BASE_URL = "https://122b-14-139-187-225.ngrok-free.app/"
+    const val BASE_URL_IMAGE = "https://122b-14-139-187-225.ngrok-free.app/driver_sync_api/"
 
     private val httpClient = OkHttpClient.Builder()
         .apply {

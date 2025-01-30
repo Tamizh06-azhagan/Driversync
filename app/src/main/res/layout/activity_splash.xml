@@ -6,12 +6,11 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="164dp"
-        android:layout_height="215dp"
-        android:layout_marginTop="312dp"
-        android:src="@mipmap/ic_launcher"
+        android:layout_width="355dp"
+        android:layout_height="294dp"
+        android:layout_marginTop="308dp"
+        android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

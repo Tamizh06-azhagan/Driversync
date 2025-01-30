@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,6 +9,7 @@
     android:background="@drawable/bb"
     tools:context=".UserScreens.Profilepage">
 
+    <!-- Back Button -->
     <ImageButton
         android:id="@+id/backButton3"
         android:layout_width="48dp"
@@ -16,67 +18,76 @@
         android:layout_marginTop="44dp"
         android:background="?attr/selectableItemBackground"
         android:importantForAccessibility="no"
+        android:contentDescription="Back"
         android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="213dp"
-        android:layout_height="153dp"
-        android:layout_marginTop="67dp"
-        android:src="@drawable/pi"
+    <!-- Profile Image -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/view"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="60dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton3" />
+        app:layout_constraintTop_toBottomOf="@id/backButton3">
 
+        <ImageView
+            android:id="@+id/imageProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="Profile Image"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Name Input -->
     <TextView
+        android:id="@+id/usern"
         android:layout_width="274dp"
         android:layout_height="38dp"
-        android:layout_marginTop="47dp"
-        android:hint="your Name"
+        android:layout_marginTop="24dp"
         android:background="@drawable/ne"
-        android:padding="5dp"
-        android:paddingHorizontal="5dp"
-        android:paddingStart="10dp"
+        android:hint="Your Name"
+        android:padding="10dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@id/view" />
 
+    <!-- Username Input -->
     <TextView
         android:id="@+id/textView9"
         android:layout_width="274dp"
         android:layout_height="38dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/ne"
-        android:hint="your Username"
-        android:padding="5dp"
-        android:paddingHorizontal="5dp"
-        android:paddingStart="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="102dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="36dp"
-        android:src="@drawable/baseline_logout_24"
+        android:hint="Your Username"
+        android:padding="10dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@id/usern" />
 
+    <!-- Logout Button with Icon on Left -->
     <Button
         android:id="@+id/logoutbutton"
         android:layout_width="285dp"
         android:layout_height="64dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="36dp"
         android:background="@drawable/buttonbackround"
-        android:text="Log OUT"
+        android:text="LOG OUT"
+        android:textAllCaps="true"
+        android:textSize="18sp"
         android:textColor="@color/white"
+        app:icon="@drawable/baseline_logout_24"
+        app:iconTint="@null"
+        app:iconGravity="textStart"
+        app:iconPadding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@id/textView9" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

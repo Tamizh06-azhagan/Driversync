@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CalendarView
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.driversync_trackanddrive.R
@@ -94,5 +95,8 @@ class UserDriverAvailableActivity : AppCompatActivity() {
                 Toast.makeText(this@UserDriverAvailableActivity, "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+        findViewById<ImageButton>(R.id.backButtontamizh).setOnClickListener {
+            finish()
+        }
     }
 }
