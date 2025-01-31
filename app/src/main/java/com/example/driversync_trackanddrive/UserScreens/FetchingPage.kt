@@ -104,7 +104,16 @@ class FetchingPage : AppCompatActivity() {
                                 val contact = data?.optString("contactnumber", "N/A")
 
                                 runOnUiThread {
-                                    loadImageFromUrl(imageUrl)
+//                                    loadImageFromUrl(imageUrl)
+
+                                    val imaUrl =  BASE_URL_IMAGE+imageUrl
+
+                                    Glide.with(applicationContext)
+                                        .load(imaUrl)
+                                        .placeholder(R.drawable.carimage1)
+                                        .error(R.drawable.carimage1)
+                                        .into(carImage)
+
                                     carName.text = name
                                     driverName.text = driver
                                     carCondition.text = condition

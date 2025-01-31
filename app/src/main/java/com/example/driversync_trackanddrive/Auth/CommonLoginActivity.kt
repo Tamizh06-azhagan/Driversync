@@ -70,7 +70,6 @@ class CommonLoginActivity : AppCompatActivity() {
                         editor.putString("id",""+loginResponse.data?.id)
                         editor.apply()
 
-
                         if(loginResponse.data?.role=="User" ){
                             val intent = Intent(this@CommonLoginActivity, UserPage::class.java)
                             startActivity(intent)

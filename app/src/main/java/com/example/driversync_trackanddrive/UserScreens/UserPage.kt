@@ -10,10 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookingdetails.Booking
 import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
+import com.example.driversync_trackanddrive.databinding.ActivityUserPageBinding
 import com.example.driversync_trackanddrive.model.Car
 import com.example.driversync_trackanddrive.model.CarResponse
 import com.example.driversync_trackanddrive.response.PriceResponse
@@ -22,6 +22,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class UserPage : AppCompatActivity() {
+
+    lateinit var binding:ActivityUserPageBinding
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var totAmt: TextView
@@ -33,7 +35,10 @@ class UserPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_user_page)
+
+        binding = ActivityUserPageBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
 
         // Initialize total amount TextView
         totAmt = findViewById(R.id.Total)
@@ -58,8 +63,13 @@ class UserPage : AppCompatActivity() {
         findViewById<Button>(R.id.viewallbutton11).setOnClickListener {
             startActivity(Intent(this, Booknow::class.java))
         }
-        findViewById<Button>(R.id.viewdetailsbutton).setOnClickListener {
-            startActivity(Intent(this,  BookingStatusActivity::class.java))
+
+        binding.viewdetailsbutton.setOnClickListener {
+            val intent = Intent(this@UserPage,BookingStatusActivity::class.java)
+            intent.putExtra("USER_ID",getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("id",
+                0.toString()
+            ))
+            startActivity(intent)
         }
 
         // Set up spinners and calendar
@@ -197,11 +207,11 @@ class UserPage : AppCompatActivity() {
                         itemList.clear()
                         itemList.addAll(carResponse.data)
                         adapter.notifyDataSetChanged()
-                        Toast.makeText(
-                            this@UserPage,
-                            "Fetched ${carList.size} cars.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            this@UserPage,
+//                            "Fetched ${carList.size} cars.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     } else {
                         Toast.makeText(this@UserPage, "No cars found.", Toast.LENGTH_SHORT)
                             .show()

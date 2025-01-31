@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookingdetails.Booking
 import com.example.driversync_trackanddrive.R
+import com.example.driversync_trackanddrive.model.BookingResponse
+import com.example.driversync_trackanddrive.network.BookingData
 
-
-class BookingAdapter(private val bookings: List<Booking>) :
+class BookingAdapter(private val bookings: List<BookingData>) :
     RecyclerView.Adapter<BookingAdapter.BookingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {
@@ -28,8 +28,8 @@ class BookingAdapter(private val bookings: List<Booking>) :
         private val driverName: TextView = itemView.findViewById(R.id.tvDriverName)
         private val status: TextView = itemView.findViewById(R.id.tvStatus)
 
-        fun bind(booking: Booking) {
-            driverName.text = booking.driverName
+        fun bind(booking: BookingData) {
+            driverName.text = booking.drivername
             status.text = booking.status.capitalize()
         }
     }

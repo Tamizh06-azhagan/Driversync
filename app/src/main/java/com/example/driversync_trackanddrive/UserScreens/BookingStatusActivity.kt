@@ -1,28 +1,36 @@
 package com.example.driversync_trackanddrive.UserScreens
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookingdetails.BookingModule
 import com.example.driversync_trackanddrive.R
-import okhttp3.*
-import org.json.JSONArray
-import java.io.IOException
+import com.example.driversync_trackanddrive.api.ApiService
+import com.example.driversync_trackanddrive.api.RetrofitClient
+import com.example.driversync_trackanddrive.network.BookingData
+import com.example.driversync_trackanddrive.network.BookingResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class BookingStatusActivity : AppCompatActivity() {
 
+    // UI Components
     private lateinit var backButton: ImageButton
     private lateinit var rvBookings: RecyclerView
+
+    // Adapter and Data
     private lateinit var bookingsAdapter: BookingAdapter
-    private val bookingsList = mutableListOf<BookingModule>()
+    private val bookingsList = mutableListOf<BookingData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_booking_details)
 
+        // Initialize UI Components
         backButton = findViewById(R.id.backButton340)
         rvBookings = findViewById(R.id.rvBookings)
 
@@ -31,68 +39,40 @@ class BookingStatusActivity : AppCompatActivity() {
         rvBookings.layoutManager = LinearLayoutManager(this)
         rvBookings.adapter = bookingsAdapter
 
-        backButton.setOnClickListener { finish() }
+        // Handle back button click
+        backButton.setOnClickListener {
+            finish() // Close the activity
+        }
 
         // Fetch booking details
         fetchBookingDetails()
     }
 
     private fun fetchBookingDetails() {
-        val userId = intent.getIntExtra("USER_ID", -1)
-        if (userId == -1) {
-            Toast.makeText(this, "Invalid User ID", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
+        val userId = intent.getStringExtra("USER_ID") ?: return
 
-        val url = "http://10.0.2.2/driver_sync_api/bookingdetails.php" // Use 10.0.2.2 for emulator
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
 
-        val client = OkHttpClient()
-        val requestBody = FormBody.Builder()
-            .add("userid", userId.toString())
-            .build()
+        apiService.getBookingDetails(userId).enqueue(object : Callback<List<BookingResponse>> {
 
-        val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    Toast.makeText(this@BookingStatusActivity, "Failed to load data", Toast.LENGTH_SHORT).show()
+            override fun onResponse(
+                call: Call<List<BookingResponse>>,
+                response: Response<List<BookingResponse>>
+            ) {
+                if (response.isSuccessful && response.body()?.get(0)?.status == true) {
+                    bookingsList.clear()
+                    response.body()?.get(0)?.data?.forEach { booking ->
+                        bookingsList.add(BookingData(booking.booking_id, booking.drivername, booking.status))
+                    }
+                    bookingsAdapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this@BookingStatusActivity, "No bookings found", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body?.string()
-                if (!response.isSuccessful || responseBody.isNullOrEmpty()) {
-                    runOnUiThread {
-                        Toast.makeText(this@BookingStatusActivity, "No data found", Toast.LENGTH_SHORT).show()
-                    }
-                    return
-                }
-
-                try {
-                    val jsonArray = JSONArray(responseBody)
-                    bookingsList.clear()
-                    for (i in 0 until jsonArray.length()) {
-                        val jsonObject = jsonArray.getJSONObject(i)
-                        val booking = BookingModule(
-                            jsonObject.getInt("booking_id"),
-                            jsonObject.getString("drivername"),
-                            jsonObject.getString("status")
-                        )
-                        bookingsList.add(booking)
-                    }
-                    runOnUiThread {
-                        bookingsAdapter.notifyDataSetChanged()
-                    }
-                } catch (e: Exception) {
-                    runOnUiThread {
-                        Toast.makeText(this@BookingStatusActivity, "Error parsing data", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            override fun onFailure(call: Call<List<BookingResponse>>, t: Throwable) {
+                Toast.makeText(this@BookingStatusActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Log.e("API_ERROR", t.message.orEmpty())
             }
         })
     }

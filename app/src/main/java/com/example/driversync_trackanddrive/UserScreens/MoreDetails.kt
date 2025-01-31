@@ -13,25 +13,6 @@ class MoreDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_more_details)
 
-        // Enable edge-to-edge display
-        WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightNavigationBars = true
-            isAppearanceLightStatusBars = true
-        }
-
-        // Apply insets to the root view
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
-            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(
-                view.paddingLeft,
-                view.paddingTop + systemInsets.top,
-                view.paddingRight,
-                view.paddingBottom + systemInsets.bottom
-            )
-            WindowInsetsCompat.CONSUMED
-        }
-
-        // Back button functionality
         findViewById<ImageButton>(R.id.backButton2).setOnClickListener {
             finish() // Close the activity and return to the previous screen
         }

@@ -9,16 +9,19 @@ import android.widget.CalendarView
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
+import com.example.driversync_trackanddrive.response.Driver
 import com.example.driversync_trackanddrive.response.GetAvailableDriversResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 
 class UserDriverAvailableActivity : AppCompatActivity() {
@@ -26,14 +29,25 @@ class UserDriverAvailableActivity : AppCompatActivity() {
     private lateinit var dateButton: Button
     private var selectedDate: String? = null
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private lateinit var adapter: DriverAvailableListAdapter
+    private lateinit var recyclerView : RecyclerView
+    private lateinit var list:ArrayList<Driver>
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_driver_availability) // Replace with your actual layout file
+        recyclerView = findViewById(R.id.recyclerView)
 
+        list = arrayListOf()
+
+        adapter = DriverAvailableListAdapter(list,applicationContext)
+
+        recyclerView.layoutManager = LinearLayoutManager(this@UserDriverAvailableActivity)
+        recyclerView.adapter = adapter
         // Initialize the button
         dateButton = findViewById(R.id.datebutton)
+
 
         if (intent.hasExtra("selectedDate")){
             selectedDate = intent.getStringExtra("selectedDate")
@@ -81,7 +95,11 @@ class UserDriverAvailableActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val driverResponse = response.body()
                     if (driverResponse != null && driverResponse.status) {
-                        Toast.makeText(this@UserDriverAvailableActivity, "Total Drivers: ${driverResponse.total_drivers}", Toast.LENGTH_SHORT).show()
+
+                        list.addAll(driverResponse.drivers)
+                        adapter.notifyDataSetChanged()
+
+//                        Toast.makeText(this@UserDriverAvailableActivity, "Total Drivers: ${driverResponse.total_drivers}", Toast.LENGTH_SHORT).show()
                         // Update your UI with the driver list, e.g., using a RecyclerView
                     } else {
                         Toast.makeText(this@UserDriverAvailableActivity, "No drivers available.", Toast.LENGTH_SHORT).show()

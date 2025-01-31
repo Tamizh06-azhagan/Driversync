@@ -3,6 +3,7 @@ package com.example.driversync_trackanddrive.DriverScreens
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -21,7 +22,7 @@ import retrofit2.Response
 class DriverPage : AppCompatActivity() {
 
     lateinit var context: Context
-    private var userId = 1
+    private var userId = -1
     private lateinit var totAmt: TextView
     private lateinit var originSpinner: Spinner
     private lateinit var destinationSpinner: Spinner
@@ -33,6 +34,12 @@ class DriverPage : AppCompatActivity() {
         setContentView(R.layout.activity_driver_page)
 
         context = this
+
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+
+        if (sharedPreferences.getString("id", null)?.toInt() != null) {
+            userId = sharedPreferences.getString("id", null)?.toInt()!!
+        }
 
         totAmt = findViewById(R.id.drivertoamt)
 
@@ -84,7 +91,12 @@ class DriverPage : AppCompatActivity() {
 
         // Set up listener for any spinner change
         val spinnerListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: android.view.View?,
+                position: Int,
+                id: Long
+            ) {
                 setupPriceDetails()
             }
 
