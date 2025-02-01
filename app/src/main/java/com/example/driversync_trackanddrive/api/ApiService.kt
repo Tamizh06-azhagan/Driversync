@@ -2,6 +2,7 @@ package com.example.driversync_trackanddrive.api
 
 import BookingdateResponse
 import DriverBookingListResponse
+import UpdateBookingStatusResponse
 import com.example.driversync_trackanddrive.response.ProfileResponse
 import com.example.driversync_trackanddrive.model.CarResponse
 import com.example.driversync_trackanddrive.network.BookingResponse
@@ -120,8 +121,16 @@ ApiService {
 
 
 
+        @FormUrlEncoded
+        @POST("update_booking_status.php")
+        fun updateBookingStatus(
+            @Field("booking_id") bookingId: Int,
+            @Field("status") status: String
+        ): Call<UpdateBookingStatusResponse>
+    }
 
-}
+
+
 
 
 

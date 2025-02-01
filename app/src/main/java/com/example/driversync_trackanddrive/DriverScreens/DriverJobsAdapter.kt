@@ -34,11 +34,12 @@ class DriverJobsAdapter(
         val booking = bookingList[position]
 
         // Display username and booking details
-        holder.textView.text = "User: ${booking.username}\nBooking ID: ${booking.id}\nDate: ${booking.dateofbooking}\nStatus: ${booking.status}"
+        holder.textView.text =
+            "User: ${booking.username}\nBooking ID: ${booking.id}\nDate: ${booking.dateofbooking}\nStatus: ${booking.status}"
 
         // Handle Accept button click
         holder.acceptButton.setOnClickListener {
-//            updateBookingStatus(booking.id, "Accepted")
+            updateBookingStatus(booking.id, "Accepted")
         }
 
     }
@@ -47,26 +48,33 @@ class DriverJobsAdapter(
         return bookingList.size
     }
 
-//    // Function to update bookings dynamically
+    //    // Function to update bookings dynamically
     fun updateBookings(newBookings: List<DriverBookingListModel>) {
         bookingList = newBookings
         notifyDataSetChanged()
     }
-//
-//    private fun updateBookingStatus(bookingId: Int, newStatus: String) {
-//        RetrofitClient.instance.create(ApiService::class.java).acceptBooking(bookingId).enqueue(object :
-//            Callback<InsertResponse> {
-//                override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
-//                    if (response.isSuccessful && response.body()?.status == true) {
-//                        Toast.makeText(context, "Booking updated to $newStatus", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        Toast.makeText(context, "Failed to update booking", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
-//                    Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-//                }
-//            })
-//    }
+
+    //
+    private fun updateBookingStatus(bookingId: Int, newStatus: String) {
+
+        RetrofitClient.instance.create(ApiService::class.java).updateBookingStatus(bookingId,newStatus).enqueue(object :Callback<UpdateBookingStatusResponse>{
+            override fun onResponse(
+                call: Call<UpdateBookingStatusResponse>,
+                response: retrofit2.Response<UpdateBookingStatusResponse>
+            ) {
+                if (response.isSuccessful){
+                    Toast.makeText(context,response.message(),Toast.LENGTH_SHORT).show()
+                } else{
+                    val errorBody = response.errorBody()?.string()
+                    Toast.makeText(context,response.message(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateBookingStatusResponse>, t: Throwable) {
+                Toast.makeText(context,t.message,Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+    }
 }

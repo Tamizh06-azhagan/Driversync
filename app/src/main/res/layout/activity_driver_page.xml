@@ -70,8 +70,6 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -84,12 +82,12 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewdriver"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="wrap_content"
                         android:clipToPadding="false"
                         android:padding="8dp"
                         android:scrollbars="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:itemCount="4"
+                        tools:itemCount="1"
                         tools:listitem="@layout/item_driverpage_layout" />
 
                     <Button

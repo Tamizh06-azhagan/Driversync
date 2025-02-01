@@ -1,58 +1,86 @@
 package com.example.driversync_trackanddrive.DriverScreens
 
+import DriverBookingListModel
+import DriverBookingListResponse
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.driversync_trackanddrive.R
+import com.example.driversync_trackanddrive.api.ApiService
+import com.example.driversync_trackanddrive.api.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DriverAllBookingActivity : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: DriverAllBookingAdapter
+    private var userId: Int = -1
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_driver_all_booking)
 
-        // Initialize the RecyclerView
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        // Retrieve user ID from SharedPreferences
+        val sharedPreferences: SharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        userId = sharedPreferences.getString("id", null)?.toIntOrNull() ?: -1
+
+        // Initialize RecyclerView
+        recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Sample data for the adapter
-        val userList = arrayListOf(
-            DriverAllBookingModule(R.drawable.baseline_person_24, "User 1"),
-            DriverAllBookingModule(R.drawable.baseline_person_24, "User 2"),
-            DriverAllBookingModule(R.drawable.baseline_person_24, "User 3"),
-            DriverAllBookingModule(R.drawable.baseline_person_24, "User 4")
-        )
-
-        // Set the adapter to the RecyclerView
-        val adapter = DriverAllBookingAdapter(userList, this)
+        adapter = DriverAllBookingAdapter(arrayListOf(), this)
         recyclerView.adapter = adapter
+
+        // Fetch bookings from the server
+        fetchBookings(userId)
 
         // Back button functionality
         findViewById<ImageButton>(R.id.backButton1).setOnClickListener {
             finish()
         }
+    }
 
-        // Optional: Handle search functionality
-        val searchView: androidx.appcompat.widget.SearchView = findViewById(R.id.searchView)
-        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                // Filter the list based on the query
-                query?.let {
-                    val filteredList = userList.filter { it.name.contains(query, true) }
-                    recyclerView.adapter = DriverAllBookingAdapter(ArrayList(filteredList), this@DriverAllBookingActivity)
+    private fun fetchBookings(userId: Int) {
+        if (userId == -1) {
+            Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        RetrofitClient.instance.create(ApiService::class.java)
+            .fetchBookingDetails(userId.toString())
+            .enqueue(object : Callback<DriverBookingListResponse> {
+                override fun onResponse(
+                    call: Call<DriverBookingListResponse>,
+                    response: Response<DriverBookingListResponse>
+                ) {
+                    if (response.isSuccessful && response.body()?.status == true) {
+                        val bookings = response.body()?.data ?: emptyList()
+                        var list: ArrayList<DriverBookingListModel> = arrayListOf()
+
+                        bookings.forEach { booking ->
+                            if (booking.status.equals("pending")){
+                                list.add(booking)
+                            }
+                        }
+                        adapter.updateBookings(list)
+                    } else {
+                        Toast.makeText(this@DriverAllBookingActivity, "No bookings found", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                return true
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                // Optionally, update the list dynamically as the user types
-                return true
-            }
-        })
+                override fun onFailure(call: Call<DriverBookingListResponse>, t: Throwable) {
+                    Log.e("DriverPage", "Error: ${t.message}")
+                    Toast.makeText(this@DriverAllBookingActivity, "Failed to load data", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }
