@@ -1,5 +1,6 @@
 package com.example.driversync_trackanddrive.UserScreens
 
+import DetailsResponse
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
@@ -11,7 +12,6 @@ import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
 import com.example.driversync_trackanddrive.network.BookingData
-import com.example.driversync_trackanddrive.network.BookingResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,15 +53,14 @@ class BookingStatusActivity : AppCompatActivity() {
 
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
 
-        apiService.getBookingDetails(userId).enqueue(object : Callback<List<BookingResponse>> {
-
+        apiService.getBookingDetails(userId).enqueue(object : Callback<DetailsResponse> {
             override fun onResponse(
-                call: Call<List<BookingResponse>>,
-                response: Response<List<BookingResponse>>
+                call: Call<DetailsResponse>,
+                response: Response<DetailsResponse>
             ) {
-                if (response.isSuccessful && response.body()?.get(0)?.status == true) {
+                if (response.isSuccessful && response.body()?.status == true) {
                     bookingsList.clear()
-                    response.body()?.get(0)?.data?.forEach { booking ->
+                    response.body()?.bookings?.forEach { booking ->
                         bookingsList.add(BookingData(booking.booking_id, booking.drivername, booking.status))
                     }
                     bookingsAdapter.notifyDataSetChanged()
@@ -70,7 +69,7 @@ class BookingStatusActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<List<BookingResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<DetailsResponse>, t: Throwable) {
                 Toast.makeText(this@BookingStatusActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                 Log.e("API_ERROR", t.message.orEmpty())
             }

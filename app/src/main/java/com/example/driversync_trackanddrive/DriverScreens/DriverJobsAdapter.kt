@@ -63,7 +63,7 @@ class DriverJobsAdapter(
                 response: retrofit2.Response<UpdateBookingStatusResponse>
             ) {
                 if (response.isSuccessful){
-                    Toast.makeText(context,response.message(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,response.body()?.message,Toast.LENGTH_SHORT).show()
                 } else{
                     val errorBody = response.errorBody()?.string()
                     Toast.makeText(context,response.message(),Toast.LENGTH_SHORT).show()

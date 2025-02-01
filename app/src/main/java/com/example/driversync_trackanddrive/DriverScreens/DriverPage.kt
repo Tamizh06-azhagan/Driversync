@@ -73,7 +73,14 @@ class DriverPage : AppCompatActivity() {
                 override fun onResponse(call: Call<DriverBookingListResponse>, response: Response<DriverBookingListResponse>) {
                     if (response.isSuccessful && response.body()?.status == true) {
                         val bookings = response.body()?.data ?: emptyList()
-                        adapter.updateBookings(bookings)
+                        var list: ArrayList<DriverBookingListModel> = arrayListOf()
+
+                        bookings.forEach { booking ->
+                            if (booking.status.equals("pending")){
+                                list.add(booking)
+                            }
+                        }
+                        adapter.updateBookings(list)
                     } else {
                         Toast.makeText(this@DriverPage, "No bookings found", Toast.LENGTH_SHORT).show()
                     }
