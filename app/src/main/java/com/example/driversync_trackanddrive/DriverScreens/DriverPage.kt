@@ -1,10 +1,14 @@
 package com.example.driversync_trackanddrive.DriverScreens
 
+import DriverBookingListModel
+import DriverBookingListResponse
+import DriverJobsAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,12 +25,15 @@ import retrofit2.Response
 
 class DriverPage : AppCompatActivity() {
 
-    lateinit var context: Context
+    private lateinit var context: Context
     private var userId = -1
     private lateinit var totAmt: TextView
     private lateinit var originSpinner: Spinner
     private lateinit var destinationSpinner: Spinner
     private lateinit var daysSpinner: Spinner
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: DriverJobsAdapter
+    private val bookingList = mutableListOf<DriverBookingListModel>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,22 +42,17 @@ class DriverPage : AppCompatActivity() {
 
         context = this
 
-        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-
-        if (sharedPreferences.getString("id", null)?.toInt() != null) {
-            userId = sharedPreferences.getString("id", null)?.toInt()!!
-        }
+        // Retrieve user ID from SharedPreferences
+        val sharedPreferences: SharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        userId = sharedPreferences.getString("id", null)?.toIntOrNull() ?: -1
 
         totAmt = findViewById(R.id.drivertoamt)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewdriver)
-        recyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        val itemList = listOf("User name 1", "User name 2", "User name 3", "User name 4")
-        val adapter = DriverJobsAdapter(itemList)
+        recyclerView = findViewById(R.id.recyclerViewdriver)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        adapter = DriverJobsAdapter(this, bookingList)
         recyclerView.adapter = adapter
 
+        // Set up the calendar for availability selection
         val calendarView = findViewById<CalendarView>(R.id.calendarView)
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
@@ -59,6 +61,29 @@ class DriverPage : AppCompatActivity() {
 
         setupSpinners()
         setupNavigation()
+
+        // Fetch booking details
+        fetchBookings(userId)
+    }
+
+    private fun fetchBookings(userId: Int) {
+        RetrofitClient.instance.create(ApiService::class.java)
+            .fetchBookingDetails(userId.toString())
+            .enqueue(object : Callback<DriverBookingListResponse> {
+                override fun onResponse(call: Call<DriverBookingListResponse>, response: Response<DriverBookingListResponse>) {
+                    if (response.isSuccessful && response.body()?.status == true) {
+                        val bookings = response.body()?.data ?: emptyList()
+                        adapter.updateBookings(bookings)
+                    } else {
+                        Toast.makeText(this@DriverPage, "No bookings found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<DriverBookingListResponse>, t: Throwable) {
+                    Log.e("DriverPage", "Error: ${t.message}")
+                    Toast.makeText(this@DriverPage, "Failed to load data", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun setupSpinners() {
@@ -67,36 +92,21 @@ class DriverPage : AppCompatActivity() {
         daysSpinner = findViewById(R.id.spinnerDays)
 
         val locations = listOf(
-            "Choose City",
-            "Chennai",
-            "Kanchipuram",
-            "Vellore",
-            "Chengalpet",
-            "Villupuram",
-            "Thiruvannamalai",
-            "Bengaluru",
-            "Tirupati",
-            "Pondicherry"
+            "Choose City", "Chennai", "Kanchipuram", "Vellore", "Chengalpet",
+            "Villupuram", "Thiruvannamalai", "Bengaluru", "Tirupati", "Pondicherry"
         )
 
         val days = (1..10).map { it.toString() }
 
-        val locationAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locations)
+        val locationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locations)
         val daysAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, days)
 
         originSpinner.adapter = locationAdapter
         destinationSpinner.adapter = locationAdapter
         daysSpinner.adapter = daysAdapter
 
-        // Set up listener for any spinner change
         val spinnerListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: android.view.View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
                 setupPriceDetails()
             }
 
@@ -136,44 +146,20 @@ class DriverPage : AppCompatActivity() {
     }
 
     private fun updateAvailability(date: String, availability: String, userId: Int) {
-        val apiService = RetrofitClient.instance.create(ApiService::class.java)
-        val call = apiService.updateAvailability(userId, availability, date)
+        val call = RetrofitClient.instance.create(ApiService::class.java)
+            .updateAvailability(userId, availability, date)
 
         call.enqueue(object : Callback<InsertResponse> {
-            override fun onResponse(
-                call: Call<InsertResponse>,
-                response: Response<InsertResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    if (apiResponse != null && apiResponse.status) {
-                        Toast.makeText(
-                            this@DriverPage,
-                            apiResponse.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this@DriverPage,
-                            "Failed to update availability.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+            override fun onResponse(call: Call<InsertResponse>, response: Response<InsertResponse>) {
+                if (response.isSuccessful && response.body()?.status == true) {
+                    Toast.makeText(this@DriverPage, response.body()?.message, Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(
-                        this@DriverPage,
-                        "Response not successful: ${response.code()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@DriverPage, "Failed to update availability.", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
-                Toast.makeText(
-                    this@DriverPage,
-                    "Error: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@DriverPage, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -183,7 +169,6 @@ class DriverPage : AppCompatActivity() {
         val destination = destinationSpinner.selectedItem.toString()
         val daysString = daysSpinner.selectedItem.toString()
 
-        // Validate inputs
         if (origin != "Choose City" && destination != "Choose City" && daysString.isNotEmpty()) {
             val days = daysString.toIntOrNull()
             if (days != null && days > 0) {
@@ -207,21 +192,13 @@ class DriverPage : AppCompatActivity() {
                     totAmt.text = "₹ $totalAmount"
                 } else {
                     totAmt.text = ""
-                    Toast.makeText(
-                        this@DriverPage,
-                        response.body()?.message ?: "Error fetching price",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@DriverPage, response.body()?.message ?: "Error fetching price", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<PriceResponse>, t: Throwable) {
                 totAmt.text = ""
-                Toast.makeText(
-                    this@DriverPage,
-                    "Failed to fetch price: ${t.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@DriverPage, "Failed to fetch price: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         })
     }

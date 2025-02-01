@@ -1,6 +1,7 @@
 package com.example.driversync_trackanddrive.api
 
 import BookingdateResponse
+import DriverBookingListResponse
 import com.example.driversync_trackanddrive.response.ProfileResponse
 import com.example.driversync_trackanddrive.model.CarResponse
 import com.example.driversync_trackanddrive.network.BookingResponse
@@ -87,11 +88,11 @@ ApiService {
         @Part image: MultipartBody.Part
     ): Call<InsertResponse>
 
-        @FormUrlEncoded
-        @POST("driver_sync_api/bookindetails.php")
-        fun getBookingDetails(
-            @Field("userid") userId: String
-        ): Call<List<BookingResponse>>
+    @FormUrlEncoded
+    @POST("driver_sync_api/bookindetails.php")
+    fun getBookingDetails(
+        @Field("userid") userId: String
+    ): Call<List<BookingResponse>>
 
     @FormUrlEncoded
     @POST("driver_sync_api/fetchprofile.php")
@@ -112,7 +113,19 @@ ApiService {
         @Field("driver_id") driverId: String?
     ): Call<DriverProfileResponse>
 
+
+    @FormUrlEncoded
+    @POST("driver_sync_api/fetch_booking_details.php")
+    fun fetchBookingDetails(@Field("userid")userId: String):Call<DriverBookingListResponse>
+
+
+
+
 }
+
+
+
+
 
 
 
