@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Driver sync-Track and drive"
+rootProject.name = "Driver sync-Book your Driver"
 include(":app")
  

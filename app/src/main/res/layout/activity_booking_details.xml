@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bb"
     android:padding="16dp">
 
@@ -12,12 +13,27 @@
         android:id="@+id/backButton340"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:contentDescription="Back" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvBookingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Booking Status!!"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/backButton340"
+        android:layout_marginTop="12dp" />
 
     <!-- RecyclerView for Booking List -->
     <androidx.recyclerview.widget.RecyclerView
@@ -25,10 +41,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        tools:listitem="@layout/item_booking"
-        app:layout_constraintTop_toBottomOf="@id/backButton340"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBookingStatus"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/item_booking"
+        android:background="@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

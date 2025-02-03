@@ -89,9 +89,13 @@ ApiService {
         @Part image: MultipartBody.Part
     ): Call<InsertResponse>
 
-    @FormUrlEncoded
-    @POST("driver_sync_api/fetchprofile.php")
-    fun getUserProfile(@Field("id") userId: String): Call<ProfileResponse>
+
+
+        @FormUrlEncoded
+        @POST("fetchprofile.php")
+        fun getUserProfile(@Field("id") userId: String): Call<ProfileResponse>
+
+
 
     @FormUrlEncoded
     @POST("driver_sync_api/insertbookingdetails.php")
