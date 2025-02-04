@@ -99,11 +99,11 @@ class CommonLoginActivity : AppCompatActivity() {
         })
     }
 
-    // Handle Back Button Press
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, Login::class.java) // Replace with the actual class for Login Page
-        startActivity(intent)
-        finish()
-    }
+//    // Handle Back Button Press
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        val intent = Intent(this, Login::class.java) // Replace with the actual class for Login Page
+//        startActivity(intent)
+//        finish()
+//    }
 }

@@ -92,7 +92,7 @@ ApiService {
 
 
         @FormUrlEncoded
-        @POST("fetchprofile.php")
+        @POST("driver_sync_api/fetchprofile.php")
         fun getUserProfile(@Field("id") userId: String): Call<ProfileResponse>
 
 
@@ -106,11 +106,18 @@ ApiService {
         @Field("status") status: String
     ): Call<BookingdateResponse>
 
-    @FormUrlEncoded
-    @POST("driver_sync_api/fetchdriverprofile.php")
-    fun fetchDriverProfile(
-        @Field("driver_id") driverId: String?
-    ): Call<DriverProfileResponse>
+
+
+
+
+        @FormUrlEncoded
+        @POST("driver_sync_api/fetchdriverprofile.php")
+        fun fetchDriverProfile(
+            @Field("driver_id") driverId: String
+        ): Call<DriverProfileResponse>
+
+
+
 
 
     @FormUrlEncoded

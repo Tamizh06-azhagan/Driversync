@@ -2,18 +2,22 @@ package com.example.driversync_trackanddrive.DriverScreens
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.example.driversync_trackanddrive.Auth.CommonLoginActivity
 import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
+import com.example.driversync_trackanddrive.api.RetrofitClient.BASE_URL_IMAGE
 import com.example.driversync_trackanddrive.response.DriverProfileResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,48 +25,48 @@ import retrofit2.Response
 
 class DriverProfile : AppCompatActivity() {
 
-    private lateinit var driverNameTextView: TextView
-    private lateinit var driverUsernameTextView: TextView
-    private lateinit var logoutButton: Button
-    private lateinit var circularImageButton: ImageButton
+    private lateinit var tvDriverName: TextView
+    private lateinit var tvDriverUsername: TextView
+    private lateinit var ivDriverProfile: ImageView
+    private lateinit var btnLogout: Button
+    private lateinit var btnAddCar: ImageButton
+    private lateinit var sharedPreferences: SharedPreferences
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_driver_profile)
 
-        // Find views
-        driverNameTextView = findViewById(R.id.textViewName)
-        driverUsernameTextView = findViewById(R.id.textView99)
-        logoutButton = findViewById(R.id.logoutbutton1)
-        circularImageButton = findViewById(R.id.addCarButton)
+        // Initialize UI components
+        tvDriverName = findViewById(R.id.textViewName)
+        tvDriverUsername = findViewById(R.id.textView99)
+        ivDriverProfile = findViewById(R.id.imageProfile) // Ensure you have this ImageView in XML
+        btnLogout = findViewById(R.id.logoutbutton1)
+        btnAddCar = findViewById(R.id.addCarButton)
 
-        // Retrieve driver_id from SharedPreferences
-        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        val driverId = sharedPreferences.getString("id", null) // Default value is -1 if not found
+        // Retrieve SharedPreferences
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val driverId = sharedPreferences.getString("id", null)
 
-        // If driver_id is valid, fetch the profile
-        if (driverId != null) {
+        if (!driverId.isNullOrEmpty()) {
             fetchDriverProfile(driverId)
         } else {
             Toast.makeText(this, "Driver ID not found", Toast.LENGTH_SHORT).show()
         }
 
         // Logout button functionality
-        logoutButton.setOnClickListener {
-            val intent = Intent(this, CommonLoginActivity::class.java)
-            startActivity(intent)
+        btnLogout.setOnClickListener {
+            logout()
         }
 
         // Back button functionality
         findViewById<ImageButton>(R.id.backButton34).setOnClickListener {
-            finish()  // Close this activity and navigate back
+            finish()
         }
 
         // Add car button functionality
-        circularImageButton.setOnClickListener {
-            val intent = Intent(this, InsertCars::class.java)
-            startActivity(intent)
+        btnAddCar.setOnClickListener {
+            startActivity(Intent(this, InsertCars::class.java))
         }
 
         // Apply window insets for system UI
@@ -78,8 +82,9 @@ class DriverProfile : AppCompatActivity() {
         }
     }
 
-    private fun fetchDriverProfile(driverId: String?) {
-        val call = RetrofitClient.instance.create(ApiService::class.java).fetchDriverProfile(driverId)
+    private fun fetchDriverProfile(driverId: String) {
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+        val call = apiService.fetchDriverProfile(driverId)
 
         call.enqueue(object : Callback<DriverProfileResponse> {
             override fun onResponse(
@@ -89,9 +94,16 @@ class DriverProfile : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val driverProfile = response.body()
                     if (driverProfile != null && driverProfile.status) {
-                        // Display driver details
-                        driverNameTextView.text = driverProfile.driver.name
-                        driverUsernameTextView.text = driverProfile.driver.username.toString()
+                        tvDriverName.text = driverProfile.driver.name
+                        tvDriverUsername.text = driverProfile.driver.username
+
+                        // Load profile image using Glide
+                        val imageUrl = BASE_URL_IMAGE + driverProfile.driver.image_path
+                        Glide.with(this@DriverProfile)
+                            .load(imageUrl)
+                            .placeholder(R.drawable.pi) // Use a default profile image
+                            .error(R.drawable.drop_down_ic) // Use the same default if an error occurs
+                            .into(ivDriverProfile)
                     } else {
                         Toast.makeText(this@DriverProfile, "Failed to retrieve driver profile", Toast.LENGTH_SHORT).show()
                     }
@@ -101,9 +113,18 @@ class DriverProfile : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DriverProfileResponse>, t: Throwable) {
-                // Handle failure
                 Toast.makeText(this@DriverProfile, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun logout() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+
+        val intent = Intent(this, CommonLoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

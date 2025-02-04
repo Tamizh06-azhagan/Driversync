@@ -17,6 +17,7 @@ import com.example.driversync_trackanddrive.Auth.CommonLoginActivity
 import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
+import com.example.driversync_trackanddrive.api.RetrofitClient.BASE_URL_IMAGE
 import com.example.driversync_trackanddrive.response.ProfileResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -94,11 +95,11 @@ class Profilepage : AppCompatActivity() {
                         tvUsername.text = userData.username
 
                         // Load profile image using Glide
-                        val imageUrl = "http://localhost/Driver_Sync_Api/" + userData.image_path
+                        val imageUrl = BASE_URL_IMAGE + userData.image_path
                         Glide.with(this@Profilepage)
                             .load(imageUrl)
                             .placeholder(R.drawable.pi) // Replace with your placeholder image
-                            .error(R.drawable.pi) // Error fallback
+                            .error(R.drawable.drop_down_ic) // Error fallback
                             .into(ivProfileImage)
                     }
                 } else {

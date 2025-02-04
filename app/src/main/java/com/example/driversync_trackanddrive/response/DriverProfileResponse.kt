@@ -3,10 +3,11 @@ package com.example.driversync_trackanddrive.response
 data class DriverProfileResponse(
     val status: Boolean,
     val message: String,
-    val driver: Drive
+    val driver: DriverData
 )
 
-data class Drive(
+data class DriverData(
     val name: String,
-    val username: String
+    val username: String,
+    val image_path: String
 )
