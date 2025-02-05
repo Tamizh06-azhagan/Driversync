@@ -1,6 +1,6 @@
 package com.example.driversync_trackanddrive.UserScreens
 
-import android.app.Dialog
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -41,46 +41,46 @@ class BooknowAdapter(
 
         // Handle "Book Now" button click
         holder.bookNowButton.setOnClickListener {
-            showBookingDialog(item)
+            showBookingDialog(item) //  Call the function here
         }
     }
 
     override fun getItemCount(): Int = itemList.size
 
-    // Function to show the booking pop-up
+    //  Function to show the booking pop-up dialog
     private fun showBookingDialog(item: ViewAllModule) {
-        val dialog = Dialog(context)
-        dialog.setContentView(R.layout.dialog) // Ensure XML file is correct
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Booking Details")
 
-        // Get EditText inputs
-        val etPickup: EditText = dialog.findViewById(R.id.etPickup)
-        val etDrop: EditText = dialog.findViewById(R.id.etDrop)
-        val btnConfirm: Button = dialog.findViewById(R.id.btnConfirm)
-        val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.dialog, null)
 
-        // Handle Confirm Booking
-        btnConfirm.setOnClickListener {
-            val pickupLocation = etPickup.text.toString().trim()
-            val dropLocation = etDrop.text.toString().trim()
+        val pickupEditText = view.findViewById<EditText>(R.id.etPickup)
+        val dropEditText = view.findViewById<EditText>(R.id.etDrop)
 
-            if (pickupLocation.isEmpty() || dropLocation.isEmpty()) {
-                Toast.makeText(context, "Please enter both locations", Toast.LENGTH_SHORT).show()
-            } else {
+        builder.setView(view)
+        builder.setPositiveButton("Confirm") { _, _ ->
+            val pickup = pickupEditText.text.toString().trim()
+            val drop = dropEditText.text.toString().trim()
+
+            if (pickup.isNotEmpty() && drop.isNotEmpty()) {
+                Toast.makeText(
+                    context,
+                    "Booking Confirmed\nPickup: $pickup\nDrop: $drop",
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 // Pass data to DriverAllBookingActivity
                 val intent = Intent(context, DriverAllBookingActivity::class.java)
-                intent.putExtra("pickup", pickupLocation)
-                intent.putExtra("drop", dropLocation)
+                intent.putExtra("pickup_location", pickup)
+                intent.putExtra("drop_location", drop)
                 context.startActivity(intent)
-
-                dialog.dismiss() // Close the dialog
+            } else {
+                Toast.makeText(context, "Please fill both fields", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Handle Cancel
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
     }
 }

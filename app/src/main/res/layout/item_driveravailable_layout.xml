@@ -25,6 +25,7 @@
             android:textStyle="bold"/>
 
         <Button
+            android:id="@+id/btn"
             android:layout_width="95dp"
             android:layout_height="45dp"
             android:layout_marginVertical="5dp"
