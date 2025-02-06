@@ -97,20 +97,28 @@ ApiService {
 
 
 
-    @FormUrlEncoded
-    @POST("driver_sync_api/insertbookingdetails.php")
-    fun insertBooking(
-        @Field("userid") userid: String,
-        @Field("driver_id") driverId: Int,
-        @Field("dateofbooking") dateOfBooking: String,
-        @Field("status") status: String
-    ): Call<BookingdateResponse>
-
 
 
 
 
         @FormUrlEncoded
+        @POST("driver_sync_api/insertbookingdetails.php")
+        fun insertBookingDetails(
+            @Field("userid") userId: Int,
+            @Field("driver_id") driverId: Int,
+            @Field("dateofbooking") dateOfBooking: String,
+            @Field("status") status: String,
+            @Field("pickup") pickup: String,
+            @Field("drop") drop: String
+        ): Call<BookingdateResponse>
+
+
+
+
+
+
+
+    @FormUrlEncoded
         @POST("driver_sync_api/fetchdriverprofile.php")
         fun fetchDriverProfile(
             @Field("driver_id") driverId: String
