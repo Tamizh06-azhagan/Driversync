@@ -8,6 +8,7 @@ import com.example.driversync_trackanddrive.response.ProfileResponse
 import com.example.driversync_trackanddrive.model.CarResponse
 import com.example.driversync_trackanddrive.response.DriverInfoResponse
 import com.example.driversync_trackanddrive.response.DriverProfileResponse
+import com.example.driversync_trackanddrive.response.FetchResponse
 import com.example.driversync_trackanddrive.response.GetAvailableDriversResponse
 import com.example.driversync_trackanddrive.response.InsertResponse
 import com.example.driversync_trackanddrive.response.LoginResponse
@@ -23,8 +24,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
-interface
-ApiService {
+interface ApiService {
 
     @FormUrlEncoded
     @POST("driver_sync_api/price.php")
@@ -49,19 +49,15 @@ ApiService {
     @FormUrlEncoded
     @POST("driver_sync_api/insertavailability.php")
     fun updateAvailability(
-        @Field("userid") userId: Int,
-        @Field("availability") availability: String,
-        @Field(
-            "availability" +
-                    "_date"
+        @Field("userid") userId: Int, @Field("availability") availability: String, @Field(
+            "availability" + "_date"
         ) availabilityDate: String
     ): Call<InsertResponse>
 
     @FormUrlEncoded
     @POST("driver_sync_api/userlogin.php")
     fun loginUser(
-        @Field("username") username: String,
-        @Field("password") password: String
+        @Field("username") username: String, @Field("password") password: String
     ): Call<LoginResponse>
 
     @FormUrlEncoded
@@ -90,63 +86,50 @@ ApiService {
     ): Call<InsertResponse>
 
 
-
-        @FormUrlEncoded
-        @POST("driver_sync_api/fetchprofile.php")
-        fun getUserProfile(@Field("id") userId: String): Call<ProfileResponse>
-
-
-
-
-
-
-
-        @FormUrlEncoded
-        @POST("driver_sync_api/insertbookingdetails.php")
-        fun insertBookingDetails(
-            @Field("userid") userId: Int,
-            @Field("driver_id") driverId: Int,
-            @Field("dateofbooking") dateOfBooking: String,
-            @Field("status") status: String,
-            @Field("pickup") pickup: String,
-            @Field("drop") drop: String
-        ): Call<BookingdateResponse>
-
-
-
-
-
+    @FormUrlEncoded
+    @POST("driver_sync_api/fetchprofile.php")
+    fun getUserProfile(@Field("id") userId: String): Call<ProfileResponse>
 
 
     @FormUrlEncoded
-        @POST("driver_sync_api/fetchdriverprofile.php")
-        fun fetchDriverProfile(
-            @Field("driver_id") driverId: String
-        ): Call<DriverProfileResponse>
+    @POST("driver_sync_api/insertbookingdetails.php")
+    fun insertBookingDetails(
+        @Field("userid") userId: String?,
+        @Field("driver_id") driverId: Int,
+        @Field("dateofbooking") dateOfBooking: String,
+        @Field("status") status: String,
+        @Field("pickup") pickup: String,
+        @Field("drop") drop: String
+    ): Call<BookingdateResponse>
 
 
-
+    @FormUrlEncoded
+    @POST("driver_sync_api/fetchdriverprofile.php")
+    fun fetchDriverProfile(
+        @Field("driver_id") driverId: String
+    ): Call<DriverProfileResponse>
 
 
     @FormUrlEncoded
     @POST("driver_sync_api/fetch_booking_details.php")
-    fun fetchBookingDetails(@Field("userid")userId: String):Call<DriverBookingListResponse>
+    fun fetchBookingDetails(@Field("userid") userId: String): Call<DriverBookingListResponse>
 
 
-
-        @FormUrlEncoded
-        @POST("driver_sync_api/update_booking_status.php")
-        fun updateBookingStatus(
-            @Field("booking_id") bookingId: Int,
-            @Field("status") status: String
-        ): Call<UpdateBookingStatusResponse>
+    @FormUrlEncoded
+    @POST("driver_sync_api/update_booking_status.php")
+    fun updateBookingStatus(
+        @Field("booking_id") bookingId: Int, @Field("status") status: String
+    ): Call<UpdateBookingStatusResponse>
 
     @FormUrlEncoded
     @POST("driver_sync_api/bookindetails.php")
     fun getBookingDetails(
         @Field("userid") userid: String
     ): Call<DetailsResponse>
-    }
+
+    @GET("driver_sync_api/viewallfetch.php")
+    fun getAvailableDrivers(): Call<FetchResponse>
+}
 
 
 

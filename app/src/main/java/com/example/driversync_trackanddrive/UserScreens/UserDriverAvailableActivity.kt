@@ -2,16 +2,15 @@ package com.example.driversync_trackanddrive.UserScreens
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.CalendarView
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.driversync_trackanddrive.R
+import com.example.driversync_trackanddrive.ViewAllModule
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
 import com.example.driversync_trackanddrive.response.Driver
@@ -25,6 +24,8 @@ import kotlin.collections.ArrayList
 
 
 class UserDriverAvailableActivity : AppCompatActivity() {
+
+    private lateinit var activity: AppCompatActivity
 
     private lateinit var dateButton: Button
     private var selectedDate: String? = null
@@ -41,7 +42,9 @@ class UserDriverAvailableActivity : AppCompatActivity() {
 
         list = arrayListOf()
 
-        adapter = DriverAvailableListAdapter(list,applicationContext)
+        activity = this@UserDriverAvailableActivity
+
+        adapter = DriverAvailableListAdapter(list,activity)
 
         recyclerView.layoutManager = LinearLayoutManager(this@UserDriverAvailableActivity)
         recyclerView.adapter = adapter

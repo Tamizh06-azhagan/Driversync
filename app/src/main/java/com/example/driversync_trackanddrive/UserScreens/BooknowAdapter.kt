@@ -15,14 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.ViewAllModule
 import com.example.driversync_trackanddrive.DriverScreens.DriverAllBookingActivity
+import com.example.driversync_trackanddrive.response.Fetch
 
 class BooknowAdapter(
-    private val itemList: ArrayList<ViewAllModule>, val context: Context
+    private val itemList: ArrayList<Fetch>, val context: Context
 ) : RecyclerView.Adapter<BooknowAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.driverName)
         val imageView: ImageView = itemView.findViewById(R.id.profileui)
+        val date:TextView=itemView.findViewById(R.id.date)
         val bookNowButton: Button = itemView.findViewById(R.id.bookBtn)
     }
 
@@ -37,7 +39,8 @@ class BooknowAdapter(
 
         // Bind data to the views
         holder.textView.text = item.name
-        holder.imageView.setImageResource(item.imageRes)
+        holder.date.text=item.availability_date
+//        holder.imageView.setImageResource(item.)
 
         // Handle "Book Now" button click
         holder.bookNowButton.setOnClickListener {
@@ -48,7 +51,7 @@ class BooknowAdapter(
     override fun getItemCount(): Int = itemList.size
 
     //  Function to show the booking pop-up dialog
-    private fun showBookingDialog(item: ViewAllModule) {
+    private fun showBookingDialog(item: Fetch) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Booking Details")
 
