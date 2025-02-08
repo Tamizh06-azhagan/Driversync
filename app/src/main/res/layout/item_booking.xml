@@ -4,19 +4,18 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-
+    android:background="@drawable/buttonbackround3"
     android:padding="8dp">
 
     <TextView
         android:id="@+id/tvDriverName"
-        android:background="@color/white"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Driver Name"
         android:layout_marginEnd="100dp"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:padding="10dp"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -25,8 +24,8 @@
         android:id="@+id/tvStatus"
         android:layout_width="150dp"
         android:layout_height="48dp"
-        android:background="@drawable/buttonbackround3"
         android:text="Status"
+        android:textStyle="bold"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="16sp"
