@@ -30,6 +30,7 @@ class DriverAvailableListAdapter(
         val textView: TextView = itemView.findViewById(R.id.driverName)
         val imageView: ImageView = itemView.findViewById(R.id.profileui)
         val bookNowButton: Button = itemView.findViewById(R.id.bookBtn)
+        val date:TextView=itemView.findViewById(R.id.date)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -43,6 +44,7 @@ class DriverAvailableListAdapter(
 
         // Bind data to views
         holder.textView.text = item.driver_name
+        holder.date.visibility=View.GONE
 
         // Handle "Book Now" button click
         holder.bookNowButton.setOnClickListener {

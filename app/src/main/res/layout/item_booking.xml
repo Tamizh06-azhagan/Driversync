@@ -23,10 +23,11 @@
 
     <TextView
         android:id="@+id/tvStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:layout_width="150dp"
+        android:layout_height="48dp"
+        android:background="@drawable/buttonbackround3"
         android:text="Status"
+        android:gravity="center"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:padding="10dp"

@@ -42,31 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/etPickup" />
 
     <!-- Book Now Button -->
-    <Button
-        android:id="@+id/btnBookNow"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Book Now"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/etDrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnCancel"
-        android:layout_marginTop="12dp" />
 
     <!-- Cancel Button -->
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/btnBookNow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
