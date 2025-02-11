@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:background="@drawable/buttonbackround3"
+    android:background="@drawable/btb"
     android:padding="8dp">
 
     <TextView
@@ -13,8 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Driver Name"
+        android:background="@drawable/buttonbackround3"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:padding="10dp"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -24,9 +25,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Status"
+        android:background="@drawable/buttonbackround3"
         android:textStyle="bold"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:padding="10dp"
         android:layout_weight="1"

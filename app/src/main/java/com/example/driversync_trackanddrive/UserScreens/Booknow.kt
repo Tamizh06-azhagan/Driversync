@@ -2,16 +2,17 @@ package com.example.driversync_trackanddrive.UserScreens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.driversync_trackanddrive.R
 import com.example.driversync_trackanddrive.api.ApiService
 import com.example.driversync_trackanddrive.api.RetrofitClient
-import com.example.driversync_trackanddrive.response.Driver
-import androidx.appcompat.widget.SearchView
 import com.example.driversync_trackanddrive.response.Fetch
 import com.example.driversync_trackanddrive.response.FetchResponse
 import retrofit2.Call
@@ -23,6 +24,8 @@ class Booknow : AppCompatActivity() {
     private lateinit var adapter: BooknowAdapter
     private val userList = ArrayList<Fetch>()
     private val filteredList = ArrayList<Fetch>()
+    private val handler = Handler(Looper.getMainLooper())
+    private var searchRunnable: Runnable? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +44,7 @@ class Booknow : AppCompatActivity() {
             finish()
         }
 
-        // Search functionality
+        // Search functionality with debounce
         val searchView: SearchView = findViewById(R.id.searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -50,7 +53,9 @@ class Booknow : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                filterList(newText)
+                searchRunnable?.let { handler.removeCallbacks(it) } // Remove previous call
+                searchRunnable = Runnable { filterList(newText) }
+                handler.postDelayed(searchRunnable!!, 300) // Delay execution
                 return true
             }
         })
@@ -66,14 +71,14 @@ class Booknow : AppCompatActivity() {
                         userList.addAll(it)
                         filteredList.addAll(it)
                         adapter.notifyDataSetChanged()
-                    }
+                    } ?: showToast("No drivers available")
                 } else {
-                    Toast.makeText(this@Booknow, "Failed to fetch drivers", Toast.LENGTH_SHORT).show()
+                    showToast("Failed to fetch drivers")
                 }
             }
 
             override fun onFailure(call: Call<FetchResponse>, t: Throwable) {
-                Toast.makeText(this@Booknow, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                showToast("Network Error: ${t.message}")
             }
         })
     }
@@ -87,5 +92,9 @@ class Booknow : AppCompatActivity() {
             filteredList.addAll(filtered)
         }
         adapter.notifyDataSetChanged()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this@Booknow, message, Toast.LENGTH_SHORT).show()
     }
 }
