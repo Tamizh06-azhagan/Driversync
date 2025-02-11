@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    const val BASE_URL = "https://e64d-14-139-187-225.ngrok-free.app/"
-    const val BASE_URL_IMAGE = "https://e64d-14-139-187-225.ngrok-free.app/driver_sync_api/"
+    const val BASE_URL ="https://a909-2401-4900-9246-b45e-20e1-a7f2-acff-d292.ngrok-free.app/"
+    const val BASE_URL_IMAGE ="https://a909-2401-4900-9246-b45e-20e1-a7f2-acff-d292.ngrok-free.app/driver_sync_api/"
 
     private val httpClient = OkHttpClient.Builder()
         .apply {
